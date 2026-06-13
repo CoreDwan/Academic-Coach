@@ -106,7 +106,8 @@ Recommended semantics:
 ## Global Course Registry
 
 When multiple courses may exist, keep a lightweight registry outside any single course.
-Recommended location depends on deployment, but the logical contract is the same.
+Default Hermes location: `~/.hermes/academic-coach/COURSE_REGISTRY.json`.
+If a deployment needs something else, override it explicitly rather than leaving the path implicit.
 
 Suggested fields:
 
@@ -158,6 +159,11 @@ Before executing any non-`help` request, resolve the target course in this order
 6. otherwise ask for clarification
 
 Never guess when multiple real candidates remain.
+
+Special rule for `init` and smoke tests:
+- explicit new-course setup data beats ambient history
+- if the user supplies a new course name, new folder, new workspace mode, or says this is a smoke test / temporary test, treat that as a new target unless they explicitly say to reuse an existing course
+- existing study-systems may be mentioned as optional context, but they must not hijack an explicit new initialization flow
 
 ## Surface Routing Rules
 
@@ -223,6 +229,9 @@ Recommended output fields:
 - `status`
 - `last_active`
 
+Default data source:
+- `~/.hermes/academic-coach/COURSE_REGISTRY.json`
+
 ### `use`
 Use to bind the current session to a chosen course.
 It should never silently switch if multiple plausible candidates exist.
@@ -230,10 +239,12 @@ It should never silently switch if multiple plausible candidates exist.
 ### `dashboard`
 Use to read the course's summary/control surface.
 In `chat` mode it may summarize `STATUS.md` or `PROGRESS.md` instead.
+In `doc` or `hybrid` mode it should prefer the course-root `DASHBOARD.md` when present.
 
 ### `inbox`
 Use to inspect or process queued requests.
 Mostly meaningful in `doc` or `hybrid` mode.
+Default target file is the course-root `INBOX.md`.
 
 ## Fresh-Agent Start Sequence
 

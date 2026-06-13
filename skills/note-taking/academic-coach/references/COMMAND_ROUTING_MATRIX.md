@@ -61,6 +61,8 @@ Choose full init when:
 - enough materials are available
 - persistent files are expected immediately
 
+For explicit `init`, do not silently retarget to an existing course just because one already exists somewhere in the vault or registry. New course/folder/workspace details from the user win.
+
 Choose lightweight bootstrap when:
 - no state exists yet
 - the user wants immediate help now
@@ -75,3 +77,4 @@ Never:
 - generate weak-point rankings without evidence
 - pretend `audit` succeeded when no study-system exists
 - silently upgrade lightweight bootstrap into full init
+- create synthetic chapter/material files just to give `init` something to analyze

@@ -114,10 +114,20 @@ That means the skill is portable, but not yet uniformly packageable across every
 
 If you are evaluating or adopting this project:
 
-1. Read `README.en.md` or `README.zh-CN.md`
+1. Read `README.md` or `README.zh-CN.md`
 2. Read `docs/OPERATOR_GUIDE.md`
 3. If you use Hermes, install via repository tap
 4. If you use another agent, clone the repo and adapt `SKILL.md` + linked assets manually
+
+## Runtime Notes After Installation
+
+Academic Coach supports multiple interaction surfaces after install:
+- `chat` — mainly operate from Hermes chat
+- `doc` — mainly operate from markdown files like `DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, `TOPICS/`
+- `hybrid` — both are valid, but chat-originated teaching/review runs should still leave the same durable doc trail
+
+If you keep multiple courses, the default global registry path is:
+- `~/.hermes/academic-coach/COURSE_REGISTRY.json`
 
 ## Future Packaging Directions
 

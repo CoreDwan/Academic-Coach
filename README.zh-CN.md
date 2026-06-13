@@ -41,6 +41,10 @@ hermes skills list
 - `academic-coach init`
 - `academic-coach continue`
 - `/academic-coach review`
+- `academic-coach courses`
+- `academic-coach use srp-phat`
+- `academic-coach dashboard`
+- `academic-coach inbox`
 - `use academic-coach to help me study digital electronics`
 
 ### 2. 初始化课程
@@ -65,7 +69,69 @@ init 阶段会先确认这些信息，再创建文件：
 - `academic-coach exam`：进入模拟考试模式
 - `academic-coach audit`：检查学习系统是否漂移或不一致
 
-### 4. 还没 init 也能开始
+### 4. `chat` / `doc` / `hybrid` 到底怎么用
+
+`chat`
+- 主要在 Hermes 对话里操作。
+- 权威学习状态仍然写在 `study-system/`。
+- `DASHBOARD.md` / `INBOX.md` / `OUTBOX.md` 这些 doc 文件可以没有。
+
+`doc`
+- 主要通过 markdown 文件协作。
+- `DASHBOARD.md` 是控制面板。
+- 新请求写进 `INBOX.md`。
+- 详细过程沉淀到 `SESSIONS/`，摘要沉淀到 `OUTBOX.md`。
+
+`hybrid`
+- 聊天和 markdown 两个入口都能用。
+- 但 chat 只是输入面，不是绕过持久化的捷径。
+- 如果你在 chat 里执行 `continue` / `review` / `exam` / `audit`，也应该同步写回：
+  - `study-system/` 状态文件
+  - `OUTBOX.md`
+  - `SESSIONS/`
+  - 必要时把标准化请求或澄清记录写进 `INBOX.md`
+
+一句话：`hybrid` 的意思是“你可以在 chat 干活，但文件系统必须还能完整看懂发生了什么”。
+
+### 5. doc 模式的典型用法
+
+如果课程启用了 doc surface，正常入口是：
+- `DASHBOARD.md`：总览和快捷入口
+- `INBOX.md`：写结构化请求
+- `OUTBOX.md`：看最近完成摘要
+- `SESSIONS/`：每次真实教学/复习/考试/审计的详细记录
+- `TOPICS/`：长期主题笔记
+
+最小 doc 请求示例：
+
+```md
+## Request: 2026-06-14-continue-srp
+status: open
+mode: continue
+course: SRP-PHAT
+topic_hint: none
+goal: continue from the next dependency-safe knowledge point
+source: user
+
+请继续学习。如果今天没有到期复习项，就进入下一个新知识点。
+```
+
+### 6. 多课程列表文件在哪
+
+Academic Coach 设计里支持多课程全局列表。
+
+默认全局 registry 路径：
+- `~/.hermes/academic-coach/COURSE_REGISTRY.json`
+
+它的用途：
+- 记录已知课程 / study-system
+- 维护 `course_id` 到课程目录、`study-system/` 路径的映射
+- 支持 `academic-coach courses`
+- 支持 `academic-coach use <course_id>`
+
+如果这个文件还不存在，skill 不应该假装它已经有，而应该在第一次真实多课程 init/sync 时创建，或者明确告诉你现在还没建。
+
+### 7. 还没 init 也能开始
 如果你一上来就说 `continue` / `review`，而当前还没有现成的 study-system，Academic Coach 不应该伪造状态。
 
 它应该进入 bootstrap：

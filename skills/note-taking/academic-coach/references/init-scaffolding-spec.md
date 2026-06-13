@@ -53,7 +53,7 @@ Use when:
 5. create doc-first surface files/folders if this course should use them
 6. build `SYLLABUS_ASSETS.md`
 7. inspect for pre-existing mapping files such as `knowledge_ppt_mapping.json`
-8. derive the first real knowledge tree
+8. derive the first real knowledge tree from actual user-provided evidence only
 9. create `KNOWLEDGE_REGISTRY.json`
 10. create all required markdown state files from templates
 11. create recommended optional files as appropriate
@@ -165,6 +165,8 @@ Always distinguish:
 - extraction risks such as scan/OCR needs
 - pre-existing mapping files detected
 
+Never create fake assets to populate this file. Missing materials should stay missing and be recorded as such.
+
 ### `DASHBOARD.md`
 If created during bootstrap:
 - show that the course is in partial state
@@ -253,6 +255,7 @@ Do not:
 - create `KNOWLEDGE_TREE.md` with fake completeness during bootstrap
 - populate `EXAM_FOCUS.md` with rankings unsupported by real materials
 - mark bootstrap state as full init just because files now exist
+- create synthetic textbook chapters, fake lecture notes, or demo materials to make initialization appear grounded
 
 ## Bottom Line
 

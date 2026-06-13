@@ -57,9 +57,9 @@ cp -R Academic-Coach/skills/note-taking/academic-coach ~/.hermes/skills/note-tak
 ## Public README structure preference
 
 For public-facing repos, prefer:
-- `README.md` as a compact preview/entry page
-- `README.en.md`, `README.zh-CN.md`, or other language-specific files for full docs
-- top-of-page links in `README.md` to those language docs, plus installation/license links
+- `README.md` as the primary English homepage / GitHub landing page
+- `README.zh-CN.md` or other language-specific files for alternate-language docs
+- top-of-page links in `README.md` to alternate-language docs, installation, and license information
 
 Avoid using one mixed bilingual README as the primary long-form document when the repo is intended for public reuse. Separate language documents are easier to scan, link, and maintain.
 

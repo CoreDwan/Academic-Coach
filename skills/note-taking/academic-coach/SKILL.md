@@ -115,9 +115,11 @@ Design the protocol so the surface name can be re-skinned later. The stable part
 13. Mixed materials are normal, not an edge case. The initialization workflow must be able to ingest PDFs, PPT/PPTX, markdown/text notes, images/screenshots, homework, lab reports, past exams, answer sheets, and reference links in one course setup.
 14. Cron/review scheduling changes require confirmation before creating or changing jobs.
 15. When evidence is missing, say so clearly rather than inventing coverage or mastery.
-16. The terminal/chat surface is preserved as a first-class interaction surface; doc-first mode does not replace it.
-17. If the course workspace includes doc-first artifacts (`DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, or `TOPICS/`), then chat/pseudo-command interactions are not a bypass: each executed teaching/review/exam/audit transaction must also be persisted into the same documentation layer, especially `SESSIONS/` and `OUTBOX.md`, and into `INBOX.md` when a normalized request record is needed.
-18. In a hybrid workflow, terminal chat is just another request-entry surface. Persistence rules must stay identical across chat, note, and cron-originated runs.
+16. Never create synthetic study materials, fake chapter notes, demo textbooks, or placeholder content files to make `init` look complete. Only inventory or transform user-provided materials; if materials are missing, scaffold an honest partial state instead.
+17. The terminal/chat surface is preserved as a first-class interaction surface; doc-first mode does not replace it.
+18. If the course workspace includes doc-first artifacts (`DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, or `TOPICS/`), then chat/pseudo-command interactions are not a bypass: each executed teaching/review/exam/audit transaction must also be persisted into the same documentation layer, especially `SESSIONS/` and `OUTBOX.md`, and into `INBOX.md` when a normalized request record is needed.
+19. In a hybrid workflow, terminal chat is just another request-entry surface. Persistence rules must stay identical across chat, note, and cron-originated runs.
+20. For `continue`, do not score or update persistent learning state until the user has answered the assessment questions for that round, unless the user explicitly asks for a rough provisional score.
 
 ## When to Use
 
@@ -183,7 +185,7 @@ Recommended doc-first collaboration artifacts:
 ## Supporting Files Included With This Skill
 
 References:
-- `references/packaging-and-distribution.md` — how to package and publish Academic Coach as a public repo; includes Hermes tap layout, manual clone/copy paths for other agents, and the preferred multilingual README structure (top-level preview README linking to language-specific docs rather than a mixed bilingual single file)
+- `references/packaging-and-distribution.md` — how to package and publish Academic Coach as a public repo; includes Hermes tap layout, manual clone/copy paths for other agents, and the current multilingual README strategy (`README.md` as the primary English homepage plus `README.zh-CN.md` for Chinese)
 - `references/reuse-map.md` — what to keep, lightly adapt, or redesign when evolving Academic Coach from chat-first to doc-first
 - `references/doc-interaction-protocol.md` — the document-first / Obsidian-first interaction layer built on top of the same Academic Coach protocol core
 - `references/doc-first-template-contract.md` — canonical responsibilities and creation rules for `DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSION` notes, and `TOPIC` notes in the doc-first surface
@@ -316,6 +318,11 @@ Before initialization, gather or confirm:
 
 Missing critical information must be asked before proceeding.
 
+Important target-resolution rule for explicit `init`:
+- do not open by assuming the request belongs to an already-known course unless the user clearly targeted that course
+- if the user is creating a new test course or gives a different folder/workspace than an existing course, that explicit new target wins
+- only inspect an existing study-system after the target course has been confirmed
+
 For a reusable question flow, consult `references/init-questionnaire.md`.
 
 Reference files:
@@ -385,8 +392,8 @@ After clarification:
 4. Create `study-system/`.
 5. **Scan material directory for pre-existing knowledge mapping files** (e.g., `knowledge_ppt_mapping.json`). If found, use it as the primary source for knowledge point extraction — skip manual material analysis.
 6. Build `SYLLABUS_ASSETS.md` with a source inventory and coverage notes.
-7. Analyze all available materials (or use mapping file from step 4).
-8. Construct the course knowledge tree at course → chapter → module → knowledge point granularity.
+7. Analyze only the materials the user actually provided (or use a detected mapping file). If materials are missing, record that honestly; do not invent substitute course content.
+8. Construct the course knowledge tree at course → chapter → module → knowledge point granularity, but only to the degree the evidence supports.
 9. Create `KNOWLEDGE_TREE.md`.
 10. Create `KNOWLEDGE_REGISTRY.json` with default statuses.
 11. Create the remaining markdown files. **Prefer batch-creating all files via `execute_code`** rather than individual `write_file` calls.
@@ -395,6 +402,7 @@ After clarification:
 14. When creating the first set of course files, prefer the bundled templates for `COURSE_OVERVIEW.md`, `PROGRESS.md`, `KNOWLEDGE_TREE.md`, `WEAK_POINTS.md`, `MISTAKES.md`, `EXAM_FOCUS.md`, `KNOWLEDGE_REGISTRY.json`, and `REVIEW_SCHEDULE.md`.
 15. If the workflow uses optional execution files, prefer the bundled templates for `STATUS.md`, `TEACHING_LOG.md`, `EXAM_SIMULATIONS.md`, and `COURSE_CONFIG.json`.
 16. **If exam is <7 days away**, set `intensive_mode: true` in COURSE_CONFIG.json and use compressed review intervals in KNOWLEDGE_REGISTRY.json settings.
+17. For smoke tests, the honest path is: create minimal/partial scaffolding with real empty-state notes, or use one small real user-provided file. Never fabricate demo chapters or fake source materials.
 
 ### Required initialization outputs
 
@@ -494,6 +502,11 @@ Ask at least:
 
 Add calculation or derivation questions when appropriate for the subject.
 
+Assessment-turn rule:
+- after asking the assessment questions, stop and wait for the user's answer
+- if the user answers only part of the assessment, ask the remaining unanswered question(s) before scoring
+- do not treat a good restatement alone as sufficient to finalize the round
+
 ### Step 5: score
 
 Score 0-100 using:
@@ -544,6 +557,11 @@ Review flow:
 6. update review history and markdown summaries
 
 When multiple items are due, still handle one knowledge point at a time unless the user explicitly asks for a batch review summary.
+
+If nothing is due yet:
+- say so explicitly
+- do not pretend the review queue is non-empty just to keep the flow moving
+- offer the user a clear choice among: strict no-op review, early review of a not-yet-due point, or switching to `continue`
 
 ## Weak-Point Protocol: `academic-coach weak`
 
@@ -781,6 +799,8 @@ When teaching technical subjects, these patterns consistently produce high compr
 14. **Using standard review intervals for near-exam courses.** When the exam is <7 days away, use compressed intervals (e.g., 4h / 12h / 24h) instead of the default 1d / 3d / 7d / 14d / 30d. Set `intensive_mode: true` in COURSE_CONFIG.json and override `settings.default_review_intervals` in KNOWLEDGE_REGISTRY.json.
 15. **Vague question format in MISTAKES.md.** When logging mistakes, write the question exactly as the user heard it during the assessment round — not a paraphrased or abstracted version. This makes later review rounds more effective because the user recognizes the framing.
 16. **Step 7 file updates done inconsistently.** After each teaching round, multiple files must be patched atomically (PROGRESS, STATUS, MISTAKES, TEACHING_LOG, REVIEW_SCHEDULE, KNOWLEDGE_REGISTRY, optionally WEAK_POINTS and KNOWLEDGE_TREE). Use `execute_code` with `patch()` to update all in one block. See `references/post-teaching-update-recipe.md` for the exact field-level recipe and consistency contract.
+17. **Fabricating demo materials during init.** Never write fake chapter notes, synthetic course content, or made-up source files just to make extraction/audit look successful. Honest empty or partial scaffolding is correct; fabricated materials are a protocol failure.
+18. **Scoring before the assessment is actually answered.** If the user only restated the concept or only answered one of several assessment questions, the round is not complete yet. Ask the remaining question(s) first; only then score and update state.
 
 ## Verification Checklist
 

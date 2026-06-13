@@ -80,6 +80,10 @@ Typical forms:
 - `academic-coach init`
 - `academic-coach continue`
 - `/academic-coach review`
+- `academic-coach courses`
+- `academic-coach use srp-phat`
+- `academic-coach dashboard`
+- `academic-coach inbox`
 - `use academic-coach to help me study digital electronics`
 
 ### 2. Initialize a course
@@ -103,7 +107,69 @@ After init, the main commands are:
 - `academic-coach exam` — enter mock-exam mode
 - `academic-coach audit` — check whether the study system drifted
 
-### 4. Use bootstrap when full init is too early
+### 4. Understand `chat` vs `doc` vs `hybrid`
+
+`chat`
+- You mainly operate from Hermes chat.
+- The authoritative learning state still lives in `study-system/`.
+- Doc artifacts such as `DASHBOARD.md` / `INBOX.md` / `OUTBOX.md` are optional.
+
+`doc`
+- You mainly operate from markdown files.
+- Read `DASHBOARD.md` as the control panel.
+- Add requests to `INBOX.md` using the built-in template.
+- Expect detailed records to accumulate in `SESSIONS/` and summaries in `OUTBOX.md`.
+
+`hybrid`
+- You may use either Hermes chat or markdown notes.
+- Chat is only an input surface, not a bypass.
+- A chat-originated `continue` / `review` / `exam` / `audit` run should still write back to:
+  - `study-system/` state files
+  - `OUTBOX.md`
+  - `SESSIONS/`
+  - `INBOX.md` when a normalized request record or clarification record is needed
+
+In other words: `hybrid` means “I can work in chat, but the course must still stay legible from files alone.”
+
+### 5. Use the doc surface intentionally
+
+If your course has doc artifacts enabled, the normal navigation pattern is:
+- `DASHBOARD.md` — current overview and quick actions
+- `INBOX.md` — where you place structured requests
+- `OUTBOX.md` — short completed summaries and pointers
+- `SESSIONS/` — one note per real teaching/review/exam/audit transaction
+- `TOPICS/` — durable topic notes
+
+Minimal doc-mode request example:
+
+```md
+## Request: 2026-06-14-continue-srp
+status: open
+mode: continue
+course: SRP-PHAT
+topic_hint: none
+goal: continue from the next dependency-safe knowledge point
+source: user
+
+请继续学习。如果今天没有到期复习项，就进入下一个新知识点。
+```
+
+### 6. Multi-course registry and helper commands
+
+Academic Coach is designed to support multiple courses.
+
+Default global registry path:
+- `~/.hermes/academic-coach/COURSE_REGISTRY.json`
+
+Purpose of this file:
+- list known courses / study-systems
+- map `course_id` to course folder and `study-system/`
+- let `academic-coach courses` enumerate courses
+- let `academic-coach use <course_id>` bind the active course for the current session
+
+If this file does not exist yet, the skill should either create it during the first real multi-course init/sync flow or explain that no registry has been established yet.
+
+### 7. Use bootstrap when full init is too early
 If you ask for `continue`, `review`, or another study action before a course has been initialized, Academic Coach should not fake state.
 
 Instead, it should enter bootstrap mode:

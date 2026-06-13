@@ -56,6 +56,12 @@ status: wip
 - `academic-coach exam`
 - Add a structured request to `INBOX.md`
 
+## HOW TO USE THIS WORKSPACE
+- `chat` mode: operate from Hermes chat; doc files are optional.
+- `doc` mode: use `DASHBOARD.md` for overview, write structured requests in `INBOX.md`, read short results in `OUTBOX.md`, and keep detailed history in `SESSIONS/`.
+- `hybrid` mode: you may trigger work from chat or docs, but real teaching/review/exam/audit runs should still leave durable records in `study-system/`, `OUTBOX.md`, and `SESSIONS/`.
+- Multi-course registry path: `~/.hermes/academic-coach/COURSE_REGISTRY.json`
+
 ## NAVIGATION
 - Study system: `study-system/`
 - Request queue: `INBOX.md`

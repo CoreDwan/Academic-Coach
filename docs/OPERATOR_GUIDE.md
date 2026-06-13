@@ -76,8 +76,27 @@ Surface helpers:
 - `academic-coach dashboard`
 - `academic-coach inbox`
 
+Default global registry path:
+- `~/.hermes/academic-coach/COURSE_REGISTRY.json`
+
 For the command taxonomy, helper taxonomy, target resolution, and `workspace_mode` versus `interaction_mode`, see `docs/COMMAND_AND_TARGET_MODEL.md`.
 For worked request normalization examples, see `docs/REQUEST_ROUTING_EXAMPLES.md`.
+
+## Interaction Modes In Practice
+
+`chat`
+- mainly operate from Hermes chat
+- authoritative state still lives in `study-system/`
+- doc-surface files may be absent
+
+`doc`
+- primarily operate through `DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, and `TOPICS/`
+- the workspace should remain legible to a fresh agent from files alone
+
+`hybrid`
+- chat and docs are both valid entry surfaces
+- chat is not a persistence bypass
+- real `continue` / `review` / `exam` / `audit` runs should still update `study-system/`, `OUTBOX.md`, and `SESSIONS/`, plus `INBOX.md` when request-state preservation matters
 
 ## What `audit` Is For
 

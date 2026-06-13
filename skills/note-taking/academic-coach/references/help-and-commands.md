@@ -68,6 +68,37 @@ Propose or update cron-based review/exam reminders. Must confirm first.
 Audit the current `study-system/` for consistency.
 Use when the user suspects drift, missing files, stale status summaries, or mismatch between markdown files and `KNOWLEDGE_REGISTRY.json`.
 
+### `academic-coach courses`
+List known courses from the global registry.
+Default registry path: `~/.hermes/academic-coach/COURSE_REGISTRY.json`.
+
+### `academic-coach use <course_id>`
+Bind the current session to one known course before running `continue`, `review`, `dashboard`, or other course actions.
+
+### `academic-coach dashboard`
+Open or summarize the current course control surface.
+In `doc` or `hybrid` mode, prefer course-root `DASHBOARD.md`.
+
+### `academic-coach inbox`
+Inspect or process queued requests.
+In `doc` or `hybrid` mode, prefer course-root `INBOX.md`.
+
+## Interaction Modes in Practice
+
+`chat`
+- mainly operate from Hermes chat
+- state still persists in `study-system/`
+- doc artifacts are optional
+
+`doc`
+- mainly operate through `DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, and `TOPICS/`
+- the course should remain understandable from files alone
+
+`hybrid`
+- both chat and docs are valid entry points
+- chat is not a persistence bypass
+- real `continue` / `review` / `exam` / `audit` transactions should still update `study-system/`, `OUTBOX.md`, and `SESSIONS/`, plus `INBOX.md` when request-state preservation is needed
+
 ## What `audit` Should Check
 
 1. Required files exist.
@@ -117,6 +148,10 @@ If persistence is requested, the minimal artifact set should usually be:
 - `PROGRESS.md`
 - `KNOWLEDGE_REGISTRY.json` with provisional entries only when clearly marked
 - `SYLLABUS_ASSETS.md` with partial-inventory notes
+
+Bootstrap honesty rule:
+- do not fabricate source materials, chapter notes, or demo assets just to make the course look initialized
+- if the user has not provided materials yet, record that explicitly and proceed with partial state only
 
 After the immediate session, the agent should recommend full `academic-coach init` or `academic-coach sync` to complete the archive.
 
