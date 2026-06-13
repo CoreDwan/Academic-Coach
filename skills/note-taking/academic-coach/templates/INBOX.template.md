@@ -1,60 +1,33 @@
+# INBOX — {{course_name}}
+
+> **Status:** {{status_banner}}
+> **Progress:** {{progress_percent}}% ({{mastered_count}}/{{total_kp}} mastered) | {{learning_count}} learning | {{weak_count}} weak | {{unseen_count}} unseen
+{{exam_line}}
+
 ---
-tags: [academic/inbox, academic/doc-surface]
-created: "{{DATE}}"
-source: "self"
-source_title: "{{COURSE_NAME}} Inbox"
-source_url: ""
-status: wip
+
+## ▶ Action
+
+- [ ] **continue** — {{continue_label}}
+- [ ] **review** — {{review_label}}
+- [ ] **weak** — {{weak_label}}
+- [ ] **exam** — {{exam_label}}
+- [ ] **plan** — {{plan_label}}
+- [ ] **sync** — {{sync_label}}
+- [ ] **audit** — {{audit_label}}
+- [ ] **status** — {{status_label}}
+
+## ✏ Request Details
+
+<!-- {{placeholder_text}} -->
+
+（在此处写下你的学习请求，或在终端输入 academic-coach inbox 处理已选动作）
+
+## 📎 Optional Context
+
+<!-- 贴链接、话题提示、材料路径、图片等（可选） -->
+
 ---
 
-# INBOX
-
-Use this file for:
-- new study requests
-- clarification questions
-- queued review prompts
-- cron-generated reminders
-
-## QUEUE RULES
-- Keep newest open requests near the top.
-- Prefer one active teaching request per course at a time.
-- Use normalized status values: `open`, `needs_clarification`, `ready`, `awaiting_user_answer`, `completed`, `cancelled`.
-- When a request turns into a teaching/review/exam run, link the corresponding session note.
-
-## ACTIVE / OPEN REQUESTS
-
-## REQUEST TEMPLATE
-```md
-## Request: {{REQUEST_ID}}
-status: open
-mode: {{MODE}}
-course: {{COURSE_NAME}}
-topic_hint: {{TOPIC_HINT_OR_NONE}}
-goal: {{GOAL_OR_NONE}}
-source: user
-source_note: {{SOURCE_NOTE_OR_NONE}}
-created_at: {{TIMESTAMP}}
-updated_at: {{TIMESTAMP}}
-blocking_questions: {{BLOCKING_QUESTIONS_OR_NONE}}
-session_note: {{SESSION_NOTE_OR_NONE}}
-
-{{REQUEST_BODY}}
-```
-
-## CLARIFICATION BLOCK TEMPLATE
-```md
-## Clarification: {{REQUEST_ID}}
-status: needs_clarification
-mode: {{MODE}}
-course: {{COURSE_NAME}}
-blocking_questions:
-- {{QUESTION_1}}
-- {{QUESTION_2}}
-
-Pending user answer here.
-```
-
-## READY / QUEUED REQUESTS
-
-## COMPLETED / ARCHIVED POINTERS
-- Move detailed outcomes to `OUTBOX.md` and `SESSIONS/`.
+<!-- 以下由系统维护，请勿手动编辑 -->
+_Last processed: {{last_processed}} | Mode: command-entry | Course: {{course_id}}_

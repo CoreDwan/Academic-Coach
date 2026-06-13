@@ -30,6 +30,29 @@ Current supported / intended surfaces:
 
 These surfaces should reuse the same mode semantics (`init`, `continue`, `review`, `exam`, etc.) and the same state model rather than behaving like separate tutoring systems.
 
+## Deterministic Companion Layer
+
+Academic Coach now includes a Python companion library (`companion/`) that handles deterministic operations so the LLM only needs to do creative work.
+
+### What the companion handles (read-only — Phase 1)
+- Registry operations: `list_courses()`, `resolve_course(course_id)`
+- State detection: `detect_state()`, `find_active_session()`, `get_inbox_ui_mode()`
+- Knowledge queries: `get_progress()`, `find_due_reviews()`, `find_eligible_next_kps()`, `find_weak_points()`
+- INBOX parsing: `parse_inbox()`, `validate_request()`
+- State machine enforcement: `validate_transition()`, `transition_state()`
+
+### When to use the companion
+- `academic-coach courses` → use `list_courses()` first (registry-first, no filesystem scan)
+- `academic-coach status` → use `get_progress()` + `detect_state()`
+- `academic-coach continue` → use `find_eligible_next_kps()` for the KP shortlist
+- `academic-coach review` → use `find_due_reviews()` for the due review queue
+- `academic-coach inbox` → use `parse_inbox()` + `validate_request()` before processing
+
+### Companion execution rule
+When the companion is available (files exist in `companion/`), prefer it for all read operations. The LLM should receive pre-computed structured context, not raw file contents. Fall back to manual file reading only if the companion module is unavailable or raises an error.
+
+For the full design, see the internal specs in `docs/internal/` (not tracked in git).
+
 The command surface must also be alias-friendly. The stable contract is the mode vocabulary, not the literal skill name. If the user invokes this system as `/academic-coach init`, `/subject-coach review`, `/course-tutor continue`, or another wrapper-specific alias, normalize it to the same underlying study modes as long as the intent is clearly this tutoring system rather than Hermes configuration.
 
 For reuse boundaries and the document-first evolution path, consult:

@@ -73,19 +73,29 @@ List known courses from the global registry.
 Default registry path: `~/.hermes/academic-coach/COURSE_REGISTRY.json`.
 
 Execution rule:
-- read the registry first
-- if the registry exists, enumerate from it instead of scanning the filesystem
-- if a listed course needs fresher mode/path details, verify against that course's `COURSE_CONFIG.json`
-- only use broad filesystem discovery as an explicit fallback when the registry is missing or broken
+- read the registry first via `companion.list_courses()` if available
+- if the registry exists, treat it as the source of truth; do NOT scan the filesystem as the primary path
+- only fall back to filesystem discovery when the registry file is missing or clearly corrupted
+- if falling back, explicitly state that you are doing a filesystem fallback
 
 ### `academic-coach use <course_id>`
-Bind the current session to one known course before running `continue`, `review`, `dashboard`, or other course actions.
+Switch the active course context.
 
 ### `academic-coach dashboard`
-Open or summarize the current course control surface.
-In `doc` or `hybrid` mode, prefer course-root `DASHBOARD.md`.
+Open or display the course DASHBOARD.md.
 
 ### `academic-coach inbox`
+Dispatch the current INBOX.md request. This is the primary doc-mode entry point.
+
+Execution rule:
+- read INBOX.md via `companion.parse_inbox()` if available
+- validate the parsed request via `companion.validate_request()`
+- detect current course interaction state via `companion.detect_state()`
+- if state is `awaiting_user_answer` and the user is trying to start a new action, surface the conflict instead of silently overriding
+- after processing, update INBOX.md projection and OUTBOX.md summary
+- create/update session note in SESSIONS/ for all instructional transactions
+
+For full inbox behavior, see `docs/internal/2026-06-13-DOC-STATE-MACHINE-SPEC.md` and `docs/internal/2026-06-13-INBOX-UI-SPEC.md`.
 Inspect or process queued requests.
 In `doc` or `hybrid` mode, prefer course-root `INBOX.md`.
 
