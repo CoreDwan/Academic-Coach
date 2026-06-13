@@ -1,6 +1,29 @@
+<div align="center">
+
 # Academic Coach
 
-[中文说明 / Chinese version](README.zh-CN.md)
+<p><a href="README.zh-CN.md">中文说明 / Chinese version</a></p>
+
+<p><strong>Persistent academic tutoring protocol for Hermes and beyond.</strong></p>
+
+<p>Turn a course into a maintained study system with structured teaching, review loops, mistake tracking, and exam preparation.</p>
+
+<p>
+  <a href="https://github.com/CoreDwan/Academic-Coach/stargazers"><img src="https://img.shields.io/github/stars/CoreDwan/Academic-Coach?style=for-the-badge&logo=github" alt="Stars"></a>
+  <a href="https://github.com/CoreDwan/Academic-Coach/network/members"><img src="https://img.shields.io/github/forks/CoreDwan/Academic-Coach?style=for-the-badge&logo=github" alt="Forks"></a>
+  <a href="https://github.com/CoreDwan/Academic-Coach/graphs/contributors"><img src="https://img.shields.io/github/contributors/CoreDwan/Academic-Coach?style=for-the-badge" alt="Contributors"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/CoreDwan/Academic-Coach?style=for-the-badge" alt="License"></a>
+  <img src="https://img.shields.io/github/last-commit/CoreDwan/Academic-Coach?style=for-the-badge" alt="Last Commit">
+</p>
+
+<p>
+  <a href="#quick-install"><img src="https://img.shields.io/badge/%F0%9F%9A%80-Quick%20Start-black?style=for-the-badge" alt="Quick Start"></a>
+  <a href="#what-it-is"><img src="https://img.shields.io/badge/%F0%9F%A7%AD-Overview-black?style=for-the-badge" alt="Overview"></a>
+  <a href="#command-protocol"><img src="https://img.shields.io/badge/%F0%9F%93%98-Command%20Protocol-black?style=for-the-badge" alt="Command Protocol"></a>
+  <a href="#key-docs"><img src="https://img.shields.io/badge/%F0%9F%93%9A-Key%20Docs-black?style=for-the-badge" alt="Key Docs"></a>
+</p>
+
+</div>
 
 Academic Coach is a reusable academic tutoring protocol for long-term course learning, exam readiness, and persistent study-state management across sessions.
 
@@ -8,16 +31,6 @@ This repository is multilingual by design:
 - the protocol can teach in Chinese, English, bilingual Chinese+English, or another user-requested language
 - during `academic-coach init`, the agent should explicitly confirm the preferred teaching/output language
 - technical terms may remain bilingual when that improves clarity
-
-[![Stars](https://img.shields.io/github/stars/CoreDwan/Academic-Coach?style=for-the-badge&logo=github)](https://github.com/CoreDwan/Academic-Coach/stargazers)
-[![Forks](https://img.shields.io/github/forks/CoreDwan/Academic-Coach?style=for-the-badge&logo=github)](https://github.com/CoreDwan/Academic-Coach/network/members)
-[![Contributors](https://img.shields.io/github/contributors/CoreDwan/Academic-Coach?style=for-the-badge)](https://github.com/CoreDwan/Academic-Coach/graphs/contributors)
-[![License](https://img.shields.io/github/license/CoreDwan/Academic-Coach?style=for-the-badge)](LICENSE)
-![Last Commit](https://img.shields.io/github/last-commit/CoreDwan/Academic-Coach?style=for-the-badge)
-
-[![Quick Start](https://img.shields.io/badge/%F0%9F%9A%80-Quick%20Start-black?style=for-the-badge)](#quick-install)
-[![Protocol](https://img.shields.io/badge/%F0%9F%93%98-Command%20Protocol-black?style=for-the-badge)](#command-protocol)
-[![Docs](https://img.shields.io/badge/%F0%9F%93%9A-Key%20Docs-black?style=for-the-badge)](#key-docs)
 
 ## What it is
 
