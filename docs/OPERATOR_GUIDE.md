@@ -65,6 +65,22 @@ Use it when:
 
 Before the first real `academic-coach init`, follow `docs/INIT_CHECKLIST.md` so workspace mode, target folder, material readiness, and summary confirmation are all checked before file creation.
 
+## Starting From a Fresh Directory or No-State Workspace
+
+If the user starts with `/academic-coach ...` but there is no existing `study-system/` or course state yet, the protocol should not pretend that progress, due reviews, or auditable records already exist.
+
+Instead, route the request through an implicit bootstrap gate:
+1. recognize the requested intent
+2. state that no initialized course state has been detected yet
+3. ask the minimum clarification questions needed to bootstrap
+4. then either run full init or a lightweight bootstrap path if the user explicitly wants immediate teaching first
+
+This applies both to pseudo-commands and natural-language triggers such as:
+- `/academic-coach review`
+- `/academic-coach audit`
+- `/academic-coach 帮我复习概率论`
+- `use academic-coach to study operating systems`
+
 ## Recommended First-Time Usage
 
 When you do not yet have every textbook, PPT, lab report, and past paper, the repo should still be used in a pragmatic order:

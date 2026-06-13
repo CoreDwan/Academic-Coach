@@ -68,6 +68,8 @@ Optional but recommended:
 - `academic-coach schedule`
 - `academic-coach audit`
 
+If the user starts with any non-`init` command or a natural-language `academic-coach` request in a workspace with no known study-system yet, the protocol should enter an implicit bootstrap gate rather than fabricate state.
+
 See also:
 - `docs/OPERATOR_GUIDE.md`
 - `docs/INIT_CHECKLIST.md`

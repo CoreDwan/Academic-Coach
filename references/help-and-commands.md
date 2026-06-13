@@ -92,6 +92,21 @@ Use when the user suspects drift, missing files, stale status summaries, or mism
 - Recommended repairs:
 - Suggested next command:
 
+## What Happens If You Start Without `init`
+
+If the user invokes `academic-coach` from a fresh directory or a workspace with no known `study-system/`, the skill should not fabricate progress, due reviews, weak points, or audit results.
+
+Instead it should:
+1. acknowledge the requested intent
+2. explain that no initialized course state has been detected yet
+3. enter a minimal bootstrap clarification phase
+4. after clarification, either run full `academic-coach init` or perform a lightweight bootstrap if the user explicitly wants immediate teaching before complete archive setup
+
+Examples:
+- `/academic-coach review` in a fresh workspace → do not invent due items; bootstrap first
+- `/academic-coach audit` in a fresh workspace → explain there is nothing to audit yet; bootstrap first
+- `/academic-coach 帮我复习线性代数` → treat as a valid intent trigger; extract the course/topic and route into bootstrap
+
 ## Recommended First-Time Flow
 
 If you are starting with partial materials or incomplete course assets:

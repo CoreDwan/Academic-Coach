@@ -138,6 +138,7 @@ References:
 - `references/help-and-commands.md`
 - `references/material-extraction-recipes.md` — image-PDF extraction, knowledge mapping detection, PPT↔textbook alignment
 - `references/post-teaching-update-recipe.md` — exact field-level update recipe for Step 7 (post-teaching file consistency)
+- `references/digital-electronics-teaching-notes.md` — domain-specific teaching patterns, analogies, assessment banks, and score tracking for 数字电子技术基础
 
 Use the template files as starting points during initialization instead of inventing file layouts from scratch.
 Use the reference files to standardize the clarification phase and cron prompt construction.
@@ -203,6 +204,7 @@ It should:
 - explain that `/academic-coach ...` is pseudo-command input, not a native Hermes slash command
 - list all supported commands
 - explain the standard initialization → audit → plan → continue/review workflow
+- explain what happens when the user starts with `/academic-coach ...` or natural language before initialization: the skill should enter an implicit bootstrap gate rather than fabricate state
 - mention exam-oriented and deadline-driven use as optional scenarios, not the default framing
 - point to `references/help-and-commands.md` for the operator manual
 
@@ -232,6 +234,23 @@ Before initialization, gather or confirm:
 Missing critical information must be asked before proceeding.
 
 For a reusable question flow, consult `references/init-questionnaire.md`.
+
+### Implicit Initialization Gate
+
+If the user invokes any `academic-coach` command other than `init` in a workspace with no known `study-system/` or no established course state, do not fabricate progress, mastery, review queues, or audit results.
+
+Instead:
+1. acknowledge the requested intent
+2. state that no initialized course state has been detected yet
+3. enter the minimum clarification phase needed to bootstrap the workflow
+4. after clarification, either run full `academic-coach init` or perform a lightweight bootstrap if the user explicitly wants immediate teaching before complete archive setup
+
+Command-specific behavior when no study-system exists:
+- `status`: explain that there is no initialized course state yet, then offer/initiate bootstrap
+- `audit`: explain that there is nothing to audit yet, then offer/initiate bootstrap
+- `continue`, `review`, `weak`: do not pretend there are due items or stored progress; bootstrap first
+- `exam`: may proceed only as an ad-hoc mock session if the user explicitly wants that, but should still explain that persistent tracking requires bootstrap
+- natural-language requests such as `/academic-coach 帮我复习 xxx` or `use academic-coach to study ...`: treat them as intent triggers and route them through this gate when no state exists
 
 ### Initialization steps
 
@@ -597,6 +616,29 @@ During course-mode replies:
 - no flooding with unrelated extras
 - explain reasoning and intuition, not just final statements
 - use public-facing, reusable wording rather than personal or one-off exam-cram framing unless the user explicitly asks for that style
+
+## Teaching Technique Notes
+
+When teaching technical subjects, these patterns consistently produce high comprehension:
+
+### Physical Intuition Anchors
+- **Complement / two's complement**: Clock analogy (mod-12 for mod-2^N). "往回拨5小时 = 往前拨7小时"
+- **De Morgan's theorem**: Series-parallel switch circuit analogy. "破坏串联断一个就够；破坏并联全部都断"
+- **Gray code**: Rotary encoder / angle measurement context. Show intermediate glitch states explicitly.
+- **BCD +6 correction**: "十六进位 vs 十进位差6个空洞" — frame as skipping invalid codes, not arbitrary magic number.
+- **Logical vs arithmetic "+"**: Explicitly show 1+1=1 (OR) vs 1+1=10 (binary add) side by side on day one.
+
+### Assessment Question Patterns That Work
+- **Concept question**: "Why does X exist / why is X asymmetric / why not just use Y?"
+- **Understanding question**: Step-by-step calculation with explicit theorem citations per step
+- **Application question**: Real-world scenario (encoder, insurance box, door access) → write expression → draw circuit
+- **Verification bonus**: Ask student to verify result by reverse operation (e.g., Gray→binary→Gray, or complement→original)
+
+### Score Calibration Notes
+- Students who explain "why" (not just "what") deserve 95+ on concept questions
+- Step-by-step with theorem citations per step = 100 on understanding questions
+- Alternative proof methods (formula + exhaustive) on same question = bonus credit
+- Non-standard but internally consistent notation (e.g., Gray MSB=0) should be noted but not penalized
 
 ## Common Pitfalls
 
