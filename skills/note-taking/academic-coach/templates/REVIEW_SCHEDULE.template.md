@@ -10,7 +10,7 @@ status: wip
 # REVIEW SCHEDULE
 
 ## POLICY
-- Default intervals: 1d / 3d / 7d / 14d / 30d
+- Default intervals: {{REVIEW_INTERVALS_LABEL}}
 - Downgrade rule: failed recall can reduce status from mastered to weak/forgotten
 - One knowledge point per active review round unless user requests batch summary
 

@@ -77,15 +77,25 @@ Before rendering templates, capture these normalized values whenever available:
 - `COURSE_NAME`
 - `ACADEMIC_TERM`
 - `WORKSPACE_MODE`
+- `INTERACTION_MODE`
 - `WORKSPACE_ROOT_OR_NULL`
 - `COURSE_FOLDER`
 - `STUDY_SYSTEM_FOLDER`
+- `COURSE_ID`
+- `COURSE_ALIASES_JSON`
+- `PREFERRED_LANGUAGE`
+- `REVIEW_INTERVALS_JSON`
+- `DOC_SURFACE_ENABLED`
+- `FILE_CREATION_DEFERRED`
+- `INTENSIVE_MODE`
+- `REVIEW_INTERVALS_LABEL`
 - `EXAM_DATE_OR_TBD`
 - `TARGET_GOAL`
 - `FOUNDATION_LEVEL`
 - `CURRENT_PHASE`
 - `INITIALIZATION_LEVEL` (`full` or `lightweight`)
 - `PARTIAL_STATE_NOTE`
+- `COURSE_STATUS` (`partial` or `full`)
 
 ## Template Variable Strategy
 
@@ -94,8 +104,11 @@ Examples:
 - `COURSE_NAME`
 - `ACADEMIC_TERM`
 - `WORKSPACE_MODE`
+- `INTERACTION_MODE`
 - `COURSE_FOLDER`
 - `EXAM_DATE_OR_TBD`
+- `PREFERRED_LANGUAGE`
+- `REVIEW_INTERVALS_JSON`
 
 ### Fill with explicit null/unknown markers when evidence is missing
 Examples:
@@ -103,6 +116,7 @@ Examples:
 - `WORKSPACE_ROOT_OR_NULL`
 - `EXAM_DATE_OR_TBD`
 - `TOP_DUE_ITEM` when there is no schedule yet
+- `COURSE_ALIASES_JSON` when no aliases have been confirmed yet
 
 Do not leave ambiguous blanks that look like accidental omission.
 
@@ -111,12 +125,14 @@ Examples:
 - `CURRENT_PHASE`: `bootstrap` or `partial-initialization`
 - `SELECTION_REASON`: `Not enough confirmed state yet; waiting for first real teaching/review transaction.`
 - `DUE_TODAY_SUMMARY`: `No reliable due queue yet.`
+- `REVIEW_INTERVALS_LABEL`: `1d / 3d / 7d / 14d / 30d` until a different confirmed policy is chosen
 
 ## File-Specific Requirements
 
 ### `COURSE_CONFIG.json`
 Must record:
 - workspace mode
+- interaction mode
 - target folder
 - initialization level
 - whether intensive mode is enabled
@@ -170,6 +186,16 @@ Do not create fake empty session notes just because scaffolding began.
 COURSE_NAME: Digital Electronics
 ACADEMIC_TERM: 2025-2026-2
 WORKSPACE_MODE: obsidian
+INTERACTION_MODE: hybrid
+COURSE_ID: digital-electronics-2025s2
+COURSE_ALIASES_JSON: ["数电", "数字电子技术基础"]
+PREFERRED_LANGUAGE: zh-CN
+DOC_SURFACE_ENABLED: true
+FILE_CREATION_DEFERRED: false
+INTENSIVE_MODE: false
+REVIEW_INTERVALS_JSON: ["1d", "3d", "7d", "14d", "30d"]
+REVIEW_INTERVALS_LABEL: 1d / 3d / 7d / 14d / 30d
+COURSE_STATUS: full
 COURSE_FOLDER: /Users/cheriwen/Documents/Obsidian/01-Academic/2025-2026-2/Major/Digital Electronics
 STUDY_SYSTEM_FOLDER: /Users/cheriwen/Documents/Obsidian/01-Academic/2025-2026-2/Major/Digital Electronics/study-system
 CURRENT_PHASE: initialization
@@ -182,6 +208,16 @@ PARTIAL_STATE_NOTE: none
 COURSE_NAME: Signals and Systems
 ACADEMIC_TERM: unknown
 WORKSPACE_MODE: obsidian
+INTERACTION_MODE: chat
+COURSE_ID: signals-and-systems-bootstrap
+COURSE_ALIASES_JSON: []
+PREFERRED_LANGUAGE: zh-CN
+DOC_SURFACE_ENABLED: false
+FILE_CREATION_DEFERRED: false
+INTENSIVE_MODE: false
+REVIEW_INTERVALS_JSON: ["1d", "3d", "7d", "14d", "30d"]
+REVIEW_INTERVALS_LABEL: 1d / 3d / 7d / 14d / 30d
+COURSE_STATUS: partial
 COURSE_FOLDER: /vault/.../Signals and Systems
 STUDY_SYSTEM_FOLDER: /vault/.../Signals and Systems/study-system
 CURRENT_PHASE: partial-initialization
@@ -196,6 +232,7 @@ PARTIAL_STATE_NOTE: Full archive not built yet; only minimum persistence exists.
 - uppercase naming convention is respected for managed study-system files
 - `KNOWLEDGE_REGISTRY.json` parses cleanly
 - `COURSE_CONFIG.json` marks `initialization_level` correctly
+- near-exam courses (<7 days) set `intensive_mode: true` and use compressed `REVIEW_INTERVALS_JSON` values such as `["4h", "12h", "24h"]`
 - bootstrap files explicitly declare provisional state where needed
 - no file claims due reviews, weak rankings, or exam focus without evidence
 

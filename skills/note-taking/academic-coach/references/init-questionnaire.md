@@ -12,20 +12,24 @@ Collect enough structured information to avoid starting initialization with ambi
 3. Which workspace mode do you want for this course?
    - `obsidian` (default, recommended)
    - `external-markdown` (a non-Obsidian markdown-first folder)
-4. What is your preferred teaching/output language?
+4. Which interaction mode should this course use?
+   - `chat` (terminal/chat-first)
+   - `doc` (document-first / Obsidian-first)
+   - `hybrid` (chat plus durable doc write-back)
+5. What is your preferred teaching/output language?
    - Examples: Chinese, English, bilingual Chinese+English, or another language
-5. What is the target course folder?
+6. What is the target course folder?
    - If workspace mode is `obsidian`: where is the existing course folder in Obsidian? If it does not exist, may I create it?
    - If workspace mode is `external-markdown`: what folder should hold the study-system? If it does not exist, may I create it?
-6. What is the exam date or approximate exam window?
-7. What is your target score, rank, or mastery goal?
-8. What is your current foundation level for this course?
-9. What materials do you already have? Please provide paths or links for textbooks, PPTs, notes, homework, labs, past papers, and reference material.
-10. Are there any image-only scans, screenshots, or handwritten notes that may need OCR/vision?
-11. Does this course contain labs, projects, or reports that affect grading?
-12. Do you have past exams, answer keys, grading rubrics, or teacher emphasis notes?
-13. How much time can you invest per day and per week?
-14. Do you want me to prepare cron-based review reminders after initialization?
+7. What is the exam date or approximate exam window?
+8. What is your target score, rank, or mastery goal?
+9. What is your current foundation level for this course?
+10. What materials do you already have? Please provide paths or links for textbooks, PPTs, notes, homework, labs, past papers, and reference material.
+11. Are there any image-only scans, screenshots, or handwritten notes that may need OCR/vision?
+12. Does this course contain labs, projects, or reports that affect grading?
+13. Do you have past exams, answer keys, grading rubrics, or teacher emphasis notes?
+14. How much time can you invest per day and per week?
+15. Do you want me to prepare cron-based review reminders after initialization?
 
 ## Recommended Follow-up Questions
 
@@ -58,6 +62,7 @@ Before creating files, summarize back to the user:
 - course name
 - term
 - workspace mode
+- interaction mode
 - teaching/output language
 - target folder
 - available materials

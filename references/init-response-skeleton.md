@@ -30,7 +30,7 @@ Apply this when any of the following is true:
    - Lightweight bootstrap: if the user wants immediate teaching/review help before a full archive exists.
 4. Ask the minimum clarification questions.
    - Full init: use the full structured questionnaire.
-   - Lightweight bootstrap: at least course/subject name, preferred teaching/output language, workspace mode, target folder or file-creation deferral, immediate goal, and available materials.
+   - Lightweight bootstrap: at least course/subject name, preferred teaching/output language, workspace mode, interaction mode (`chat`/`doc`/`hybrid`), target folder or file-creation deferral, immediate goal, and available materials.
 5. Explain what happens next.
    - Full init: build the course workspace and initialize the study-system files.
    - Lightweight bootstrap: create the minimum state needed and start exactly one teaching/review/exam task.

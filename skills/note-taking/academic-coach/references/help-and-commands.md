@@ -105,9 +105,11 @@ Use it when:
 Minimum clarification still required:
 1. course or subject name
 2. preferred teaching/output language
-3. workspace mode and target folder, or explicit permission to defer file creation
-4. immediate session goal
-5. currently available materials or evidence
+3. workspace mode
+4. interaction mode (`chat`, `doc`, or `hybrid`)
+5. target folder, or explicit permission to defer file creation
+6. immediate session goal
+7. currently available materials or evidence
 
 If persistence is requested, the minimal artifact set should usually be:
 - `COURSE_CONFIG.json`

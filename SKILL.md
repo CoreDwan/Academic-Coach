@@ -30,9 +30,36 @@ Current supported / intended surfaces:
 
 These surfaces should reuse the same mode semantics (`init`, `continue`, `review`, `exam`, etc.) and the same state model rather than behaving like separate tutoring systems.
 
+The command surface must also be alias-friendly. The stable contract is the mode vocabulary, not the literal skill name. If the user invokes this system as `/academic-coach init`, `/subject-coach review`, `/course-tutor continue`, or another wrapper-specific alias, normalize it to the same underlying study modes as long as the intent is clearly this tutoring system rather than Hermes configuration.
+
 For reuse boundaries and the document-first evolution path, consult:
 - `references/reuse-map.md`
 - `references/doc-interaction-protocol.md`
+- `references/command-and-target-model.md`
+
+## Protocol Documentation Hygiene
+
+When evolving this skill's protocol, keep the documentation stack small and role-separated.
+
+Treat these four as the canonical control-plane docs:
+- `references/command-and-target-model.md` — command taxonomy, course identity, target resolution, `workspace_mode` vs `interaction_mode`
+- `references/COMMAND_ROUTING_MATRIX.md` — initialized vs no-state vs lightweight-bootstrap routing
+- `references/init-scaffolding-spec.md` — full init vs lightweight bootstrap artifact rules and template filling
+- `references/doc-interaction-protocol.md` — doc-first artifacts and persistence semantics
+
+Treat these as secondary operator/support docs:
+- `references/request-routing-examples.md` — worked normalization examples
+- `references/help-and-commands.md` — concise operator command help
+- `references/init-response-skeleton.md` — first-turn reply shape for fresh/no-state starts
+- `references/reuse-map.md` and `references/user-journey.md` — design anchors, not parallel specs
+
+Documentation maintenance rules:
+1. Do not create new top-level protocol docs when an existing canonical doc can absorb the rule.
+2. `OPERATOR_GUIDE`-style docs should explain practical usage, not re-specify routing or target resolution already defined elsewhere.
+3. `INIT_CHECKLIST`-style docs should stay compact checklists; the full creation logic belongs in the init scaffolding spec.
+4. If a workflow doc is fully absorbed by the operator guide, remove the standalone duplicate instead of keeping two drifting versions.
+5. When chat/doc/hybrid behavior changes, update the canonical control-plane docs first, then refresh operator/support docs to point back to them.
+
 
 ## Command Protocol
 
@@ -79,7 +106,7 @@ Design the protocol so the surface name can be re-skinned later. The stable part
    - 薄弱项：
 5. Use the user's preferred teaching/output language. If unknown, confirm it during initialization; preserve technical terms in English when useful.
 6. Before creating course notes, first confirm the workspace mode. Default is Obsidian, but a non-Obsidian markdown workspace is allowed if the user explicitly prefers it.
-7. If workspace mode is Obsidian, always search the Obsidian vault for existing course folders and align with existing structure.
+7. If workspace mode is Obsidian, always align with the existing Obsidian vault structure, naming conventions, and course-folder organization before creating or updating files. If the `vero-collaboration` skill is also in play for that workspace, reuse its collaboration rules instead of inventing a parallel study-system layout.
 8. File names for academic-coach managed documents must use uppercase English names.
 9. By default, use a `study-system/` subdirectory under the chosen course folder.
 10. Use markdown for human-facing files and JSON for the authoritative state registry.
@@ -274,17 +301,18 @@ Before initialization, gather or confirm:
 1. Course name
 2. Academic term / semester
 3. Workspace mode: `obsidian` or `external-markdown`
-4. Course folder path inside Obsidian, or an external markdown course folder, or permission to create it
-5. Preferred teaching/output language
-6. Exam date if known
-7. Target score or target mastery level
-8. User's current foundation level
-9. Available materials and their paths or links
-10. Whether there are labs, homework, or project components
-11. Whether past exams and answer keys are available
-12. Time budget per day / per week
-13. Whether to create cron review reminders
-14. Whether materials may include images/scans needing OCR or vision help
+4. Interaction mode for this course: `chat`, `doc`, or `hybrid`
+5. Course folder path inside Obsidian, or an external markdown course folder, or permission to create it
+6. Preferred teaching/output language
+7. Exam date if known
+8. Target score or target mastery level
+9. User's current foundation level
+10. Available materials and their paths or links
+11. Whether there are labs, homework, or project components
+12. Whether past exams and answer keys are available
+13. Time budget per day / per week
+14. Whether to create cron review reminders
+15. Whether materials may include images/scans needing OCR or vision help
 
 Missing critical information must be asked before proceeding.
 
@@ -321,9 +349,11 @@ Use lightweight bootstrap only when all of the following are true:
 Minimum required clarification for lightweight bootstrap:
 1. course or subject name
 2. preferred teaching/output language
-3. workspace mode and intended target folder, or explicit permission to defer file creation temporarily
-4. immediate goal for this session (e.g. review one topic, debug one homework concept, run one mock question)
-5. currently available materials or evidence, even if partial
+3. workspace mode
+4. interaction mode (`chat`, `doc`, or `hybrid`)
+5. intended target folder, or explicit permission to defer file creation temporarily
+6. immediate goal for this session (e.g. review one topic, debug one homework concept, run one mock question)
+7. currently available materials or evidence, even if partial
 
 Lightweight bootstrap behavior:
 1. create or reserve the target course context if the user wants persistence now
@@ -748,7 +778,7 @@ When teaching technical subjects, these patterns consistently produce high compr
 11. **Not checking for pre-existing knowledge mappings.** When materials include PPT-to-HTML conversions, always check for a `knowledge_ppt_mapping.json` or similar mapping file first. If it exists, use it directly as the primary source for knowledge point extraction instead of manually scanning all materials. This can turn a multi-hour analysis into minutes.
 12. **PPT chapter numbering ≠ textbook chapter numbering.** Chinese textbook PPTs often use their own chapter numbering that diverges from the textbook. For example, PPT "ch10 波形产生和整形" may correspond to textbook Chapter 7. Always cross-reference PPT titles with the textbook table of contents rather than assuming numbering alignment.
 13. **Creating study-system files one at a time.** During init, use `execute_code` to batch-create all 12+ files in a single script. Individual `write_file` calls are slow and create unnecessary tool-call overhead.
-14. **Using standard review intervals for near-exam courses.** When the exam is <7 days away, use compressed intervals (e.g., 4h / 12h / 24h) instead of the default 1d / 3d / 7d / 14d / 30d. Set `intensive_mode: true` in COURSE_CONFIG.json and override `settings.default_review_intervals_days` in KNOWLEDGE_REGISTRY.json.
+14. **Using standard review intervals for near-exam courses.** When the exam is <7 days away, use compressed intervals (e.g., 4h / 12h / 24h) instead of the default 1d / 3d / 7d / 14d / 30d. Set `intensive_mode: true` in COURSE_CONFIG.json and override `settings.default_review_intervals` in KNOWLEDGE_REGISTRY.json.
 15. **Vague question format in MISTAKES.md.** When logging mistakes, write the question exactly as the user heard it during the assessment round — not a paraphrased or abstracted version. This makes later review rounds more effective because the user recognizes the framing.
 16. **Step 7 file updates done inconsistently.** After each teaching round, multiple files must be patched atomically (PROGRESS, STATUS, MISTAKES, TEACHING_LOG, REVIEW_SCHEDULE, KNOWLEDGE_REGISTRY, optionally WEAK_POINTS and KNOWLEDGE_TREE). Use `execute_code` with `patch()` to update all in one block. See `references/post-teaching-update-recipe.md` for the exact field-level recipe and consistency contract.
 

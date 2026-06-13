@@ -2,98 +2,84 @@
 
 Academic Coach 是一个可复用的学科助教协议，用于长期课程学习、考试准备，以及跨会话持续维护学习状态。
 
-这个仓库从设计上就是多语言的：
-- 协议本身可以用中文、英文、中英双语或用户指定的其他语言教学
-- 在 `academic-coach init` 阶段，agent 必须明确确认后续的 teaching/output language
-- 如果更利于理解，术语可以保留双语
+当前结论：它现在已经可以用了，但它是 skill protocol，不是 Hermes 原生 slash command。
 
-当前状态：
-- 以 protocol 为核心
-- 是 pure skill workflow，不是 Hermes 原生 slash command
-- 已支持通过这个 GitHub 仓库做 Hermes custom tap 安装
-- 默认支持 Obsidian 工作区，也支持用户选择 external markdown workspace
-- init 时必须明确 `workspace_mode`（`obsidian` / `external-markdown`）
-- 支持教材、PPT/PPTX、PDF、笔记、图片、实验报告、作业、历年卷等混合资料
+## 它是什么
 
-核心思路：
-Academic Coach 把一门课当成“持续维护的学习系统”，而不是一次性问答。
+Academic Coach 的核心思路，是把一门课当成“持续维护的学习系统”，而不是一次性问答。
 
-Hermes 快速安装：
+它现在支持：
+- 通过这个 GitHub 仓库作为 Hermes custom tap 安装
+- 教材、PPT/PPTX、PDF、笔记、图片、实验报告、作业、历年卷等混合资料
+- 多轮学习进度维护
+- 每轮只处理一个知识点
+- 错题记录、间隔复习、考试模式
+- Obsidian 或 external-markdown 工作区
+- `chat` / `doc` / `hybrid` 三种交互模式
+
+## Hermes 快速安装
+
 ```bash
 hermes skills tap add CoreDwan/Academic-Coach
 hermes skills install CoreDwan/Academic-Coach/academic-coach
 ```
 
-手动 clone/copy 和其他 agent 的适配方式见 `docs/INSTALLATION.md`。
+如果不是 Hermes，或者你想手动适配其他 agent，就直接 clone 仓库并从 `SKILL.md` 开始。
 
-仓库结构：
-- `SKILL.md` — 主协议定义
-- `templates/` — 可复用 markdown/json 模板
-- `references/` — 初始化问卷、cron prompt patterns 等操作参考
-- `docs/` — 属于公开协议的一部分的操作/说明文档
+## 简要使用说明
 
-受管理的 study-system 文件：
-必需：
-- `COURSE_OVERVIEW.md`
-- `PROGRESS.md`
-- `KNOWLEDGE_TREE.md`
-- `WEAK_POINTS.md`
-- `MISTAKES.md`
-- `EXAM_FOCUS.md`
-- `REVIEW_SCHEDULE.md`
-- `SYLLABUS_ASSETS.md`
-- `KNOWLEDGE_REGISTRY.json`
-
-推荐但可选：
-- `STATUS.md`
-- `TEACHING_LOG.md`
-- `EXAM_SIMULATIONS.md`
-- `COURSE_CONFIG.json`
-
-命令协议：
+### 1. 调用 skill
+你可以用自然语言，也可以用伪命令形式：
 - `academic-coach help`
 - `academic-coach init`
-- `academic-coach status`
 - `academic-coach continue`
-- `academic-coach review`
-- `academic-coach weak`
-- `academic-coach plan`
-- `academic-coach exam`
-- `academic-coach sync`
-- `academic-coach mistakes`
-- `academic-coach schedule`
-- `academic-coach audit`
+- `/academic-coach review`
+- `use academic-coach to help me study digital electronics`
 
-重要 bootstrap 规则：
-如果用户在一个还没有现成 study-system 的工作区里，直接使用非 `init` 命令，或者直接自然语言触发 academic-coach，请不要伪造状态，而应进入 implicit bootstrap gate。
+### 2. 初始化课程
+当你想为某门课建立长期维护的学习系统时，用：
+- `academic-coach init`
 
-Lightweight bootstrap：
-如果用户在全新工作区里需要“立刻开始”，但现有证据还不足以支撑完整初始化，可以使用 lightweight bootstrap。
-它应该：
-- 先确认最小必要上下文
-- 不凭空生成完整知识树或考试重点排名
-- 按需只创建最小持久化文件
-- 允许先执行一次即时 teaching/review/exam 任务
-- 明确把当前工作区标记为 partially initialized
+init 阶段会先确认这些信息，再创建文件：
+- 课程名称
+- 教学/输出语言
+- 工作区模式（`obsidian` / `external-markdown`）
+- 交互模式（`chat` / `doc` / `hybrid`）
+- 目标文件夹
+- 当前已有资料
+- 考试时间与当前目标
 
-设计约束：
-- 每轮只讲一个知识点
-- 必须等用户回答后才能继续
-- 如果 teaching/output language 未知，必须在 init 时确认
-- 受管理文件名使用大写英文
-- cron 相关改动必须先确认
-- 不伪造掌握度、不伪造覆盖范围、不虚构证据
+### 3. 日常使用
+初始化后，主要用这些命令：
+- `academic-coach status`：看当前进度和下一步建议
+- `academic-coach continue`：讲一个知识点
+- `academic-coach review`：做一轮间隔复习
+- `academic-coach weak`：专攻薄弱点
+- `academic-coach exam`：进入模拟考试模式
+- `academic-coach audit`：检查学习系统是否漂移或不一致
 
-另见：
-核心协议文档：
+### 4. 还没 init 也能开始
+如果你一上来就说 `continue` / `review`，而当前还没有现成的 study-system，Academic Coach 不应该伪造状态。
+
+它应该进入 bootstrap：
+- 先追问最小必要信息
+- 判断是 full init 还是 lightweight bootstrap
+- 必要时只创建部分文件
+- 先支持你开始一次真实学习任务
+
+## 使用注意
+
+- 这是 custom tap，不是 Hermes 官方内置 skill。
+- 可以用中文、英文、中英双语或你指定的语言教学。
+- 受管理学习文件使用大写英文文件名。
+- 支持 cron 提醒，但创建/修改 schedule 之前仍应确认。
+- 它更适合“长期课程助教”，不是随手问一句就结束的临时问答。
+
+## 进一步阅读
+
+如果你要看协议内部设计，优先读：
+- `SKILL.md`
 - `docs/COMMAND_AND_TARGET_MODEL.md`
-- `docs/COMMAND_ROUTING_MATRIX.md`
 - `docs/INIT_SCAFFOLDING_SPEC.md`
 - `docs/DOC_INTERACTION_PROTOCOL.md`
-
-操作与补充文档：
-- `docs/OPERATOR_GUIDE.md`
-- `docs/INIT_CHECKLIST.md`
-- `docs/INIT_RESPONSE_SKELETON.md`
-- `docs/AUDIT_SPEC.md`
 - `docs/INSTALLATION.md`
