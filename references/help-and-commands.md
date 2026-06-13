@@ -72,6 +72,12 @@ Use when the user suspects drift, missing files, stale status summaries, or mism
 List known courses from the global registry.
 Default registry path: `~/.hermes/academic-coach/COURSE_REGISTRY.json`.
 
+Execution rule:
+- read the registry first
+- if the registry exists, enumerate from it instead of scanning the filesystem
+- if a listed course needs fresher mode/path details, verify against that course's `COURSE_CONFIG.json`
+- only use broad filesystem discovery as an explicit fallback when the registry is missing or broken
+
 ### `academic-coach use <course_id>`
 Bind the current session to one known course before running `continue`, `review`, `dashboard`, or other course actions.
 

@@ -228,9 +228,16 @@ Recommended output fields:
 - `workspace_mode`
 - `status`
 - `last_active`
+- `course_root`
+- `study_system_root`
+- `dashboard_path` when doc surface exists
 
-Default data source:
-- `~/.hermes/academic-coach/COURSE_REGISTRY.json`
+Data-source rules:
+1. First read `~/.hermes/academic-coach/COURSE_REGISTRY.json` (or the explicitly overridden registry path).
+2. If the registry exists, treat it as the source of truth for course enumeration. Do not start by crawling the filesystem, searching the whole home directory, or guessing from Obsidian paths.
+3. For each listed course, you may optionally verify/refresh details from that course's `COURSE_CONFIG.json` if needed, but keep the registry entry as the primary identity anchor.
+4. Only fall back to filesystem discovery when the registry is absent, unreadable, or explicitly known to be incomplete — and say that fallback is happening.
+5. If registry data and `COURSE_CONFIG.json` disagree on fields like `interaction_mode`, prefer the more specific current course config and repair the registry afterward rather than reporting stale values.
 
 ### `use`
 Use to bind the current session to a chosen course.

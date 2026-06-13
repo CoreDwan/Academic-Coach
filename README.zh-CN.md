@@ -129,6 +129,11 @@ Academic Coach 设计里支持多课程全局列表。
 - 支持 `academic-coach courses`
 - 支持 `academic-coach use <course_id>`
 
+重要执行规则：
+- 如果 registry 已存在，`academic-coach courses` 应先读它，而不是先全盘扫描文件系统
+- 如果需要刷新某门课的模式/路径细节，再去核对该课程的 `COURSE_CONFIG.json`
+- `find ~/...` 这种广泛搜索只能作为 registry 缺失或损坏时的 fallback，而且要明确说自己正在 fallback
+
 如果这个文件还不存在，skill 不应该假装它已经有，而应该在第一次真实多课程 init/sync 时创建，或者明确告诉你现在还没建。
 
 ### 7. 还没 init 也能开始

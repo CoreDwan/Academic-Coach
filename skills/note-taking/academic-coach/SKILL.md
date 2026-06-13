@@ -90,6 +90,8 @@ Likewise, `/academic-coach help` and `/academic-coach audit` should be interpret
 
 For the command taxonomy, course-targeting rules, and `workspace_mode` versus `interaction_mode`, consult `references/command-and-target-model.md`.
 
+For helper intents like `academic-coach courses`, prefer the explicit registry-first behavior: read `~/.hermes/academic-coach/COURSE_REGISTRY.json` before any filesystem discovery, and only fall back to broad scanning when the registry is missing or broken.
+
 Design the protocol so the surface name can be re-skinned later. The stable part is the mode vocabulary (`init`, `continue`, `review`, `weak`, `exam`, `status`, `audit`, `schedule`, `mistakes`, `sync`), not the literal skill name. This keeps the skill reusable as a generic subject-coach template and compatible with future doc-first or automation surfaces.
 
 ## Hard Rules

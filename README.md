@@ -167,6 +167,11 @@ Purpose of this file:
 - let `academic-coach courses` enumerate courses
 - let `academic-coach use <course_id>` bind the active course for the current session
 
+Important execution rule:
+- if the registry exists, `academic-coach courses` should read it first instead of crawling the filesystem
+- if fresher per-course details are needed, verify them from each course's `COURSE_CONFIG.json`
+- broad `find ~/...` style discovery is only a fallback when the registry is missing or broken, and that fallback should be stated explicitly
+
 If this file does not exist yet, the skill should either create it during the first real multi-course init/sync flow or explain that no registry has been established yet.
 
 ### 7. Use bootstrap when full init is too early
