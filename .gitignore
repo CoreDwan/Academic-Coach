@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Local runtime artifacts
+.tmp/
+.tmp-*/
+
+# Internal working notes (not part of the public skill contract)
+docs/internal/

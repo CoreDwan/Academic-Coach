@@ -1,0 +1,40 @@
+{
+  "course": "{{COURSE_NAME}}",
+  "academic_term": "{{ACADEMIC_TERM}}",
+  "exam_date": "{{EXAM_DATE_OR_NULL}}",
+  "target_goal": "{{TARGET_GOAL}}",
+  "last_updated": "{{DATE}}",
+  "status_legend": {
+    "unseen": "□ 未学习",
+    "learning": "◐ 学习中",
+    "mastered": "✓ 已掌握",
+    "weak": "⚠ 薄弱",
+    "forgotten": "✗ 遗忘"
+  },
+  "settings": {
+    "default_review_intervals_days": [1, 3, 7, 14, 30],
+    "teaching_language": "zh-CN",
+    "terms_style": "preserve-english-terms"
+  },
+  "knowledge_points": [
+    {
+      "id": "ch01-mod01-kp01",
+      "chapter": "{{CHAPTER_NAME}}",
+      "module": "{{MODULE_NAME}}",
+      "knowledge_point": "{{KNOWLEDGE_POINT_NAME}}",
+      "aliases": [],
+      "status": "unseen",
+      "dependencies": [],
+      "importance": 3,
+      "difficulty": 3,
+      "evidence_sources": [],
+      "exam_frequency": 0,
+      "mastery_score": null,
+      "mistake_count": 0,
+      "last_studied": null,
+      "next_review": null,
+      "review_history": [],
+      "notes": ""
+    }
+  ]
+}
