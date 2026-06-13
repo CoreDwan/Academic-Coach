@@ -180,9 +180,7 @@ First determine the workspace mode:
 If workspace mode is `obsidian`, resolve the correct Obsidian course folder first.
 If workspace mode is `external-markdown`, resolve the user-specified course folder outside the vault.
 
-Then create or maintain:
-
-`<course-folder>/study-system/`
+### `<course-folder>/study-system/` (state and knowledge files)
 
 Required files:
 
@@ -203,13 +201,17 @@ Recommended optional files:
 - `EXAM_SIMULATIONS.md`
 - `COURSE_CONFIG.json`
 
-Recommended doc-first collaboration artifacts:
+### `<course-folder>/` (doc-first collaboration surface — at course root, NOT inside study-system/)
 
-- `DASHBOARD.md`
-- `INBOX.md`
-- `OUTBOX.md`
-- `SESSIONS/`
-- `TOPICS/`
+These files live directly under the course folder, alongside `study-system/`:
+
+- `DASHBOARD.md` — human-facing control panel and summary
+- `INBOX.md` — current interaction surface / input console
+- `OUTBOX.md` — latest agent responses / summaries
+- `SESSIONS/` — one note per teaching/review/exam transaction
+- `TOPICS/` — durable concept notes mapped to knowledge points
+
+**Important:** When checking for INBOX.md, look at `<course-folder>/INBOX.md`, NOT `<course-folder>/study-system/INBOX.md`. The registry's `inbox_path` field (if set) points to the correct location.
 
 ## Supporting Files Included With This Skill
 
