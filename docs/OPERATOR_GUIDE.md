@@ -39,6 +39,10 @@ That works because the agent interprets them as protocol commands. It does not m
 - `academic-coach schedule`
 - `academic-coach audit`
 
+## Command Routing Matrix
+
+For the full routing rules covering initialized state, no-state bootstrap, lightweight bootstrap, and natural-language normalization, see `docs/COMMAND_ROUTING_MATRIX.md`.
+
 ## What `audit` Is For
 
 `academic-coach audit` is the repair-and-consistency pass for an existing `study-system/`.

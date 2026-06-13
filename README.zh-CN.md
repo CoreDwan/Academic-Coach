@@ -89,5 +89,6 @@ Lightweight bootstrap：
 - `docs/OPERATOR_GUIDE.md`
 - `docs/INIT_CHECKLIST.md`
 - `docs/INIT_RESPONSE_SKELETON.md`
+- `docs/COMMAND_ROUTING_MATRIX.md`
 - `docs/MINIMAL_WORKFLOW.md`
 - `docs/AUDIT_SPEC.md`
