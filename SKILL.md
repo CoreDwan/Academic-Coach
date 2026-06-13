@@ -587,11 +587,16 @@ Output:
 
 ## Inbox Protocol: `academic-coach inbox`
 
-Dispatch the current INBOX.md as a doc-mode request. **This works in both `doc` and `hybrid` interaction modes.** Only pure `chat` mode courses have no INBOX.md.
+**CRITICAL: When the user invokes `academic-coach inbox`, you MUST read and dispatch INBOX.md. Do NOT fall through to chat-mode teaching. Do NOT treat `inbox` as equivalent to `continue`.**
 
-Before processing, verify:
-- The course's `interaction_mode` is `doc` or `hybrid` (check COURSE_CONFIG.json or registry)
-- `INBOX.md` exists at the course root (check registry `inbox_path` or derive from course_root)
+Step 0 — mandatory first action:
+1. Resolve the course context (use `companion.resolve_course()`).
+2. Check `ctx.interaction_mode` — if `chat`, explain inbox is not available and suggest `continue`. If `doc` or `hybrid`, proceed.
+3. Read INBOX.md from `ctx.inbox_path` (or `<course-folder>/INBOX.md`). It exists at the course root, NOT in study-system/.
+4. Parse it with `companion.parse_inbox(ctx)`.
+5. If the parsed action is valid, execute it. If not, report the validation errors.
+
+This is the primary doc-mode entry point. **It works in both `doc` and `hybrid` interaction modes.** Only pure `chat` mode courses have no INBOX.md.
 
 Execution flow:
 1. Parse INBOX.md via `companion.parse_inbox(ctx)` — extracts action, details, context
