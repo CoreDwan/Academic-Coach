@@ -24,9 +24,9 @@ It intentionally does not ship an `npx` installer yet, because its canonical art
 
 ## Supported Distribution Modes
 
-### 1. Hermes Agent — repository tap (recommended)
+### 1. Hermes Agent — custom repository tap (recommended)
 
-This repository includes a Hermes tap-compatible layout under:
+This GitHub repository itself is the tap source. It includes a Hermes tap-compatible layout under:
 
 - `skills/note-taking/academic-coach/`
 

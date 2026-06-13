@@ -9,6 +9,16 @@ This repository is multilingual by design:
 - during `academic-coach init`, the agent should explicitly confirm the preferred teaching/output language
 - technical terms may remain bilingual when that improves clarity
 
+[![Stars](https://img.shields.io/github/stars/CoreDwan/Academic-Coach?style=for-the-badge&logo=github)](https://github.com/CoreDwan/Academic-Coach/stargazers)
+[![Forks](https://img.shields.io/github/forks/CoreDwan/Academic-Coach?style=for-the-badge&logo=github)](https://github.com/CoreDwan/Academic-Coach/network/members)
+[![Contributors](https://img.shields.io/github/contributors/CoreDwan/Academic-Coach?style=for-the-badge)](https://github.com/CoreDwan/Academic-Coach/graphs/contributors)
+[![License](https://img.shields.io/github/license/CoreDwan/Academic-Coach?style=for-the-badge)](LICENSE)
+![Last Commit](https://img.shields.io/github/last-commit/CoreDwan/Academic-Coach?style=for-the-badge)
+
+[![Quick Start](https://img.shields.io/badge/%F0%9F%9A%80-Quick%20Start-black?style=for-the-badge)](#quick-install)
+[![Protocol](https://img.shields.io/badge/%F0%9F%93%98-Command%20Protocol-black?style=for-the-badge)](#command-protocol)
+[![Docs](https://img.shields.io/badge/%F0%9F%93%9A-Key%20Docs-black?style=for-the-badge)](#key-docs)
+
 ## What it is
 
 Academic Coach treats a course like a persistent study system rather than a one-off Q&A session.
@@ -27,7 +37,7 @@ It is designed for mixed study materials such as:
 Current status:
 - protocol-first
 - pure skill workflow, not a native Hermes slash command
-- Hermes repository-tap install supported via `skills/note-taking/academic-coach/`
+- Hermes custom-tap install supported via this GitHub repository
 - Obsidian-default workspace design, with support for a user-chosen external markdown workspace
 - explicit `workspace_mode` selection during init (`obsidian` or `external-markdown`)
 
@@ -68,11 +78,14 @@ Start with:
 
 This repo has not been uploaded to Hermes official built-in skills.
 
-What I did is the custom-repository route documented by Hermes:
-- publish the skill files inside a GitHub repository
-- expose an installable layout under `skills/note-taking/academic-coach/`
-- let users add that GitHub repo as a custom skill source with `hermes skills tap add owner/repo`
-- then search/install the skill from that repo
+The tap source is this GitHub repository itself:
+- repo source: `CoreDwan/Academic-Coach`
+- installable skill path inside the repo: `skills/note-taking/academic-coach/`
+
+What Hermes does:
+1. `hermes skills tap add CoreDwan/Academic-Coach` registers the GitHub repo as a custom skill source
+2. Hermes scans the repo for installable skill layouts
+3. `hermes skills install CoreDwan/Academic-Coach/academic-coach` installs the skill from that repo
 
 In other words:
 - official/bundled skill: shipped by Hermes itself
