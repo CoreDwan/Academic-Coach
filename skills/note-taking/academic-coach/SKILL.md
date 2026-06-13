@@ -20,10 +20,25 @@ It is designed for mixed study materials: textbooks, PPT/PPTX, PDFs, markdown no
 
 This skill must act like a persistent academic operating system, not a one-off explainer. It should initialize a course, build a knowledge tree, maintain learning state, teach one knowledge point at a time, record mistakes, schedule spaced review, and run exam simulations.
 
+## Interaction Surfaces
+
+Academic Coach has a stable protocol core and one or more interaction surfaces.
+
+Current supported / intended surfaces:
+- chat or pseudo-command interaction inside Hermes
+- document-first interaction inside Obsidian or another markdown workspace
+
+These surfaces should reuse the same mode semantics (`init`, `continue`, `review`, `exam`, etc.) and the same state model rather than behaving like separate tutoring systems.
+
+For reuse boundaries and the document-first evolution path, consult:
+- `references/reuse-map.md`
+- `references/doc-interaction-protocol.md`
+
 ## Command Protocol
 
-This is a pure skill protocol, not a native Hermes slash command. The user may write commands in natural language or pseudo-command form. Treat the following as equivalent triggers:
+This is a pure skill protocol, not a native Hermes slash command. The user may write commands in natural language or pseudo-command form.
 
+Core study modes:
 - `academic-coach help`
 - `academic-coach init`
 - `academic-coach status`
@@ -37,8 +52,18 @@ This is a pure skill protocol, not a native Hermes slash command. The user may w
 - `academic-coach schedule`
 - `academic-coach audit`
 
+Surface helpers:
+- `academic-coach courses`
+- `academic-coach use <course_id>`
+- `academic-coach dashboard`
+- `academic-coach inbox`
+
 If the user writes `/academic-coach init`, interpret it as the same protocol command unless they explicitly say they are modifying Hermes itself.
 Likewise, `/academic-coach help` and `/academic-coach audit` should be interpreted as pseudo-command invocations of this skill, not as native Hermes slash commands.
+
+For the command taxonomy, course-targeting rules, and `workspace_mode` versus `interaction_mode`, consult `references/command-and-target-model.md`.
+
+Design the protocol so the surface name can be re-skinned later. The stable part is the mode vocabulary (`init`, `continue`, `review`, `weak`, `exam`, `status`, `audit`, `schedule`, `mistakes`, `sync`), not the literal skill name. This keeps the skill reusable as a generic subject-coach template and compatible with future doc-first or automation surfaces.
 
 ## Hard Rules
 
@@ -59,8 +84,13 @@ Likewise, `/academic-coach help` and `/academic-coach audit` should be interpret
 9. By default, use a `study-system/` subdirectory under the chosen course folder.
 10. Use markdown for human-facing files and JSON for the authoritative state registry.
 11. Do not begin initialization until required information has been clarified.
-12. Cron/review scheduling changes require confirmation before creating or changing jobs.
-13. When evidence is missing, say so clearly rather than inventing coverage or mastery.
+12. During `init`, use a superpower-style clarification gate: actively gather course name, exam context, workspace target, available materials, desired mode, and missing-but-important constraints before creating files or a study plan.
+13. Mixed materials are normal, not an edge case. The initialization workflow must be able to ingest PDFs, PPT/PPTX, markdown/text notes, images/screenshots, homework, lab reports, past exams, answer sheets, and reference links in one course setup.
+14. Cron/review scheduling changes require confirmation before creating or changing jobs.
+15. When evidence is missing, say so clearly rather than inventing coverage or mastery.
+16. The terminal/chat surface is preserved as a first-class interaction surface; doc-first mode does not replace it.
+17. If the course workspace includes doc-first artifacts (`DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, or `TOPICS/`), then chat/pseudo-command interactions are not a bypass: each executed teaching/review/exam/audit transaction must also be persisted into the same documentation layer, especially `SESSIONS/` and `OUTBOX.md`, and into `INBOX.md` when a normalized request record is needed.
+18. In a hybrid workflow, terminal chat is just another request-entry surface. Persistence rules must stay identical across chat, note, and cron-originated runs.
 
 ## When to Use
 
@@ -115,7 +145,22 @@ Recommended optional files:
 - `EXAM_SIMULATIONS.md`
 - `COURSE_CONFIG.json`
 
+Recommended doc-first collaboration artifacts:
+
+- `DASHBOARD.md`
+- `INBOX.md`
+- `OUTBOX.md`
+- `SESSIONS/`
+- `TOPICS/`
+
 ## Supporting Files Included With This Skill
+
+References:
+- `references/packaging-and-distribution.md` — how to package and publish Academic Coach as a public repo; includes Hermes tap layout, manual clone/copy paths for other agents, and the preferred multilingual README structure (top-level preview README linking to language-specific docs rather than a mixed bilingual single file)
+- `references/reuse-map.md` — what to keep, lightly adapt, or redesign when evolving Academic Coach from chat-first to doc-first
+- `references/doc-interaction-protocol.md` — the document-first / Obsidian-first interaction layer built on top of the same Academic Coach protocol core
+- `references/doc-first-template-contract.md` — canonical responsibilities and creation rules for `DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSION` notes, and `TOPIC` notes in the doc-first surface
+- `references/user-journey.md` — timeline-first statement of how users discover, bootstrap, use, and grow with Academic Coach over the life of a course
 
 Templates:
 - `templates/COURSE_OVERVIEW.template.md`
@@ -130,15 +175,25 @@ Templates:
 - `templates/COURSE_CONFIG.template.json`
 - `templates/KNOWLEDGE_REGISTRY.template.json`
 - `templates/REVIEW_SCHEDULE.template.md`
+- `templates/DASHBOARD.template.md`
+- `templates/INBOX.template.md`
+- `templates/OUTBOX.template.md`
+- `templates/SESSION.template.md`
+- `templates/TOPIC.template.md`
 
 References:
 - `references/init-questionnaire.md`
+- `references/init-response-skeleton.md` — standardized first-turn reply shape for fresh/no-state starts and implicit bootstrap cases
 - `references/cron-prompt-patterns.md`
 - `references/review-history-schema.md`
 - `references/help-and-commands.md`
 - `references/material-extraction-recipes.md` — image-PDF extraction, knowledge mapping detection, PPT↔textbook alignment
 - `references/post-teaching-update-recipe.md` — exact field-level update recipe for Step 7 (post-teaching file consistency)
 - `references/digital-electronics-teaching-notes.md` — domain-specific teaching patterns, analogies, assessment banks, and score tracking for 数字电子技术基础
+- `references/command-and-target-model.md` — command taxonomy, course identity model, and target-resolution priority across chat/doc/hybrid workflows
+- `references/request-routing-examples.md` — canonical request schema plus routing/normalization examples across chat, notes, and cron surfaces
+- `references/init-scaffolding-spec.md` — exact full-init vs lightweight-bootstrap artifact matrix, file creation order, and template variable filling rules
+- `references/hybrid-chat-doc-persistence.md` — hybrid workflow rule: terminal/chat remains first-class, but chat-originated runs must still write back into `SESSIONS/`, `OUTBOX.md`, and related study-system records when doc-first artifacts exist
 
 Use the template files as starting points during initialization instead of inventing file layouts from scratch.
 Use the reference files to standardize the clarification phase and cron prompt construction.
@@ -234,6 +289,9 @@ Before initialization, gather or confirm:
 Missing critical information must be asked before proceeding.
 
 For a reusable question flow, consult `references/init-questionnaire.md`.
+
+Reference files:
+- `references/COMMAND_ROUTING_MATRIX.md` — normalization rules for pseudo-commands, natural-language triggers, no-state bootstrap, and lightweight-vs-full-init routing
 
 ### Implicit Initialization Gate
 

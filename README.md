@@ -53,6 +53,7 @@ Current status:
 - Hermes custom-tap install supported via this GitHub repository
 - Obsidian-default workspace design, with support for a user-chosen external markdown workspace
 - explicit `workspace_mode` selection during init (`obsidian` or `external-markdown`)
+- doc-first / Obsidian-first collaboration surface documented for the next evolution stage
 
 ## Quick install
 
@@ -111,8 +112,8 @@ Academic Coach currently uses the third model: a custom GitHub tap, not an offic
 
 Source tree:
 - `SKILL.md` — main protocol definition
-- `templates/` — reusable markdown/json templates
-- `references/` — operational references such as the init questionnaire and cron prompt patterns
+- `templates/` — reusable markdown/json templates, including doc-first workspace artifacts such as dashboard/inbox/session/topic notes
+- `references/` — operational references such as the init questionnaire, routing examples, scaffolding rules, and cron prompt patterns
 - `docs/` — operator and protocol documentation tracked as part of the public contract
 
 Installable Hermes layout:
@@ -137,8 +138,16 @@ Optional but recommended:
 - `EXAM_SIMULATIONS.md`
 - `COURSE_CONFIG.json`
 
+Doc-first collaboration artifacts:
+- `DASHBOARD.md`
+- `INBOX.md`
+- `OUTBOX.md`
+- `SESSIONS/`
+- `TOPICS/`
+
 ## Command protocol
 
+Core study modes:
 - `academic-coach help`
 - `academic-coach init`
 - `academic-coach status`
@@ -151,6 +160,12 @@ Optional but recommended:
 - `academic-coach mistakes`
 - `academic-coach schedule`
 - `academic-coach audit`
+
+Surface helpers:
+- `academic-coach courses`
+- `academic-coach use <course_id>`
+- `academic-coach dashboard`
+- `academic-coach inbox`
 
 These may also appear as pseudo-commands like `/academic-coach review` or as natural-language requests such as `help me review calculus with academic-coach`.
 
@@ -188,11 +203,19 @@ It should:
 
 ## Key docs
 
-- `docs/INSTALLATION.md`
+Core protocol docs:
+- `docs/COMMAND_AND_TARGET_MODEL.md`
+- `docs/COMMAND_ROUTING_MATRIX.md`
+- `docs/INIT_SCAFFOLDING_SPEC.md`
+- `docs/DOC_INTERACTION_PROTOCOL.md`
+
+Operator and supporting docs:
 - `docs/OPERATOR_GUIDE.md`
+- `docs/REQUEST_ROUTING_EXAMPLES.md`
 - `docs/INIT_CHECKLIST.md`
 - `docs/INIT_RESPONSE_SKELETON.md`
-- `docs/COMMAND_ROUTING_MATRIX.md`
-- `docs/MINIMAL_WORKFLOW.md`
 - `docs/AUDIT_SPEC.md`
+- `docs/REUSE_MAP.md`
+- `docs/USER_JOURNEY.md`
+- `docs/INSTALLATION.md`
 - `LICENSE`

@@ -85,10 +85,15 @@ Lightweight bootstrap：
 - 不伪造掌握度、不伪造覆盖范围、不虚构证据
 
 另见：
-- `docs/INSTALLATION.md`
+核心协议文档：
+- `docs/COMMAND_AND_TARGET_MODEL.md`
+- `docs/COMMAND_ROUTING_MATRIX.md`
+- `docs/INIT_SCAFFOLDING_SPEC.md`
+- `docs/DOC_INTERACTION_PROTOCOL.md`
+
+操作与补充文档：
 - `docs/OPERATOR_GUIDE.md`
 - `docs/INIT_CHECKLIST.md`
 - `docs/INIT_RESPONSE_SKELETON.md`
-- `docs/COMMAND_ROUTING_MATRIX.md`
-- `docs/MINIMAL_WORKFLOW.md`
 - `docs/AUDIT_SPEC.md`
+- `docs/INSTALLATION.md`

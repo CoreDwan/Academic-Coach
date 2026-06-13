@@ -1,128 +1,71 @@
 # Init Checklist
 
-This checklist is for the first real execution of `academic-coach init` in a fresh study session.
+Short execution checklist for the first real `academic-coach init` in a fresh course workspace.
 
-## Goal
+Canonical spec:
+- `docs/INIT_SCAFFOLDING_SPEC.md` = what gets created and how templates are filled
+This file = compact preflight checklist only.
 
-Prevent bad initialization caused by wrong workspace selection, unclear target folder, partial materials, or premature file creation.
+## 1. Confirm intent
+- The user is actually asking for `academic-coach init`
+- Not `help`, `audit`, a one-off tutoring answer, or Hermes slash-command development
 
-## Rule Zero
+## 2. Confirm workspace target
+- `workspace_mode` is known: `obsidian` or `external-markdown`
+- target course folder is known
+- permission to create the folder/files is clear
 
-Do not create any study-system files until the clarification summary has been shown back to the user and confirmed.
-
-## Phase 1: Confirm Command Intent
-
-Before doing anything else, confirm that the user is actually asking for:
-- `academic-coach init`
-
-Not:
-- `academic-coach help`
-- `academic-coach audit`
-- a one-off tutoring answer
-- Hermes native slash-command development
-
-## Phase 2: Confirm Workspace Decision
-
-The init flow must explicitly capture:
-- workspace mode: `obsidian` or `external-markdown`
-- target course folder
-- whether folder creation is allowed if missing
-
-Checks:
-- If `obsidian`, locate the course inside the vault and align with existing note structure.
-- If `external-markdown`, use the user-specified markdown-first folder and do not assume any Obsidian path rules.
-- Do not silently default to Obsidian if the user asked for something else.
-
-## Phase 3: Confirm Course Basics
-
-Required:
+## 3. Confirm course basics
 - exact course name
-- academic term / semester
-- exam date or approximate exam window
-- target score / mastery goal
+- term / semester
+- exam date or exam window
+- target score or mastery goal
 - current foundation level
-- daily / weekly study budget
+- study budget
 
-Do not proceed if the time horizon and goal are too vague to drive planning.
+## 4. Confirm materials
+- confirmed assets are listed with paths/links
+- promised-but-missing assets are separated from confirmed ones
+- OCR / scan / image risk is noted if relevant
+- pre-existing mapping files were checked for
 
-## Phase 4: Confirm Materials
+## 5. Confirm mode decision
+- normal mode or near-exam intensive mode
+- whether cron should be proposed later
+- whether doc-first artifacts are desired now
 
-Gather paths or links for whatever currently exists:
-- textbook
-- PPT / slides
-- notes
-- homework
-- labs / reports
-- past exams
-- answer keys / rubrics
-- references
-
-Checks:
-- separate confirmed materials from promised-but-missing materials
-- identify whether image-only PDFs / screenshots / handwriting may need OCR or vision
-- check for pre-existing mapping files such as `knowledge_ppt_mapping.json`, `outline.json`, or similar structured indexes
-
-## Phase 5: Confirm Execution Mode
-
-Before file creation, decide whether init should run in:
-- normal mode
-- intensive near-exam mode
-
-Use intensive mode when the exam is very near and review intervals should be compressed.
-
-## Phase 6: Confirmation Summary
-
-Before creating files, show a summary containing:
-- course name
-- term
+## 6. Show confirmation summary
+Before creating files, reflect back:
+- course
 - workspace mode
 - target folder
 - exam timing
-- target goal
-- foundation level
+- goal
 - available materials
 - missing materials
-- OCR / vision risk
-- whether cron should be proposed later
+- risks / unknowns
 
-If the user corrects anything, revise the summary first.
+If the summary is not approved, do not create files.
 
-## Phase 7: File-Creation Preconditions
+## 7. Create only after all preconditions pass
+Create files only when:
+- intent is `academic-coach init`
+- workspace target is unambiguous
+- minimum metadata exists
+- some usable evidence exists
+- summary approval is explicit
 
-Only create files when all of the following are true:
-- command intent is `academic-coach init`
-- workspace mode is known
-- target folder is known
-- folder creation permission is clear
-- minimum course metadata is known
-- at least some usable materials exist
-- confirmation summary has been approved
-
-## Phase 8: Post-Creation Sanity Check
-
-Immediately after initialization, verify:
+## 8. Immediate post-init sanity check
 - `study-system/` exists in the correct location
-- uppercase filenames were used
-- required files exist
-- `KNOWLEDGE_REGISTRY.json` is valid JSON
-- `COURSE_CONFIG.json` records workspace mode correctly if present
-- the generated knowledge tree is not obviously empty or too coarse
-- `academic-coach audit` can be the next recommended command
+- uppercase naming is respected
+- required files exist for the chosen init level
+- `KNOWLEDGE_REGISTRY.json` parses cleanly
+- provisional state is marked honestly if bootstrap-like gaps remain
+- next recommended command is usually `academic-coach audit`
 
-## Fast Failure Conditions
-
-Stop and ask instead of guessing when:
+## Stop and ask instead of guessing when
 - workspace mode is missing
 - target folder is ambiguous
-- materials were referenced but not actually provided
+- materials were mentioned but not actually provided
 - exam timing is unknown and the user wants a sprint plan
-- the user’s course folder structure conflicts with their stated workspace choice
-
-## Recommended First Real Flow
-
-1. `academic-coach help`
-2. `academic-coach init`
-3. clarification summary
-4. file creation
-5. `academic-coach audit`
-6. `academic-coach plan`
+- course folder structure conflicts with the stated workspace choice
