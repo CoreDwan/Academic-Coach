@@ -148,6 +148,7 @@ Design the protocol so the surface name can be re-skinned later. The stable part
 21. Only one active instructional thread per course. If a session note is in `awaiting_user_answer`, new teaching actions must not silently replace it. Surface the conflict and let the user choose: resume or cancel-and-restart.
 22. Every interactive teaching/review/exam session must create a session note in `SESSIONS/`. Read-only actions (`status`, `help`) are exempt.
 23. `INBOX.md` is a UI projection driven by course interaction state. Its layout (command-entry, clarification, answer-entry, post-completion) is determined by the current state, not by a static template.
+24. `academic-coach inbox` is valid in both `hybrid` and `doc` modes. Do not reject an inbox request just because the user is currently interacting via chat — hybrid mode means both surfaces are active. Check the course's registered `interaction_mode` before deciding whether INBOX.md is available.
 
 ## When to Use
 
@@ -584,7 +585,11 @@ Output:
 
 ## Inbox Protocol: `academic-coach inbox`
 
-Dispatch the current INBOX.md as a doc-mode request.
+Dispatch the current INBOX.md as a doc-mode request. **This works in both `doc` and `hybrid` interaction modes.** Only pure `chat` mode courses have no INBOX.md.
+
+Before processing, verify:
+- The course's `interaction_mode` is `doc` or `hybrid` (check COURSE_CONFIG.json or registry)
+- `INBOX.md` exists at the course root (check registry `inbox_path` or derive from course_root)
 
 Execution flow:
 1. Parse INBOX.md via `companion.parse_inbox(ctx)` — extracts action, details, context
