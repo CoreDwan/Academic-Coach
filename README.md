@@ -52,8 +52,8 @@ Current reality:
 
 ```bash
 hermes skills tap add CoreDwan/Academic-Coach
-hermes skills search academic-coach --source CoreDwan/Academic-Coach
 hermes skills install CoreDwan/Academic-Coach/academic-coach
+hermes skills list
 ```
 
 ### Hermes manual clone/copy
@@ -69,7 +69,11 @@ For manual adaptation or non-Hermes usage, clone the repo and start from `SKILL.
 ## Usage
 
 ### 1. Load the skill
-Ask Hermes to use `academic-coach`, then invoke the protocol in natural language or pseudo-command form.
+Start Hermes, then load or invoke `academic-coach` in natural language or pseudo-command form.
+
+Useful entry patterns:
+- start Hermes normally, then type `/skill academic-coach`
+- or start with the skill preloaded: `hermes -s academic-coach`
 
 Typical forms:
 - `academic-coach help`
