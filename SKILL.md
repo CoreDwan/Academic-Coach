@@ -12,6 +12,19 @@ metadata:
 
 # Academic Coach
 
+## ⚠ BEFORE ANYTHING ELSE: Check interaction_mode
+
+Many courses use `hybrid` mode — chat AND doc surface are BOTH active.
+When the user invokes `academic-coach inbox` or `/academic-coach inbox`:
+
+1. **DO NOT assume "chat mode."** Read `study-system/COURSE_CONFIG.json` first.
+2. If `interaction_mode` is `hybrid` or `doc` → INBOX.md is valid. Read it from the course root (NOT study-system/).
+3. Parse the checked action. Execute it. Create session note. Update OUTBOX.
+4. Only reject inbox if `interaction_mode` is literally `"chat"`.
+
+The INBOX.md for Digital Electronics exists at:
+`/Users/cheriwen/Documents/Obsidian/01-Academic/2025-2026-2/Major/Digital Electronics/INBOX.md`
+
 ## Overview
 
 Academic Coach is a pure-skill command protocol for running a long-term subject tutoring workflow inside Hermes without adding native slash commands to the CLI.
