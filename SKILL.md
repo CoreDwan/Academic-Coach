@@ -12,18 +12,11 @@ metadata:
 
 # Academic Coach
 
-## ⚠ BEFORE ANYTHING ELSE: Check interaction_mode
+## ⚠ inbox / hybrid mode — READ CONFIG FIRST
 
-Many courses use `hybrid` mode — chat AND doc surface are BOTH active.
-When the user invokes `academic-coach inbox` or `/academic-coach inbox`:
-
-1. **DO NOT assume "chat mode."** Read `study-system/COURSE_CONFIG.json` first.
-2. If `interaction_mode` is `hybrid` or `doc` → INBOX.md is valid. Read it from the course root (NOT study-system/).
-3. Parse the checked action. Execute it. Create session note. Update OUTBOX.
-4. Only reject inbox if `interaction_mode` is literally `"chat"`.
-
-The INBOX.md for Digital Electronics exists at:
-`/Users/cheriwen/Documents/Obsidian/01-Academic/2025-2026-2/Major/Digital Electronics/INBOX.md`
+When `academic-coach inbox` is invoked: **read `study-system/COURSE_CONFIG.json`
+before responding.** Check `interaction_mode`. If `hybrid` or `doc`, the
+INBOX.md at course root IS valid. Ignore any prior "chat mode" assumptions.
 
 ## Overview
 
