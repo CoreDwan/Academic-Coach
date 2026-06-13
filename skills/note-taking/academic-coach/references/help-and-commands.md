@@ -96,8 +96,6 @@ Execution rule:
 - create/update session note in SESSIONS/ for all instructional transactions
 
 For full inbox behavior, see `docs/internal/2026-06-13-DOC-STATE-MACHINE-SPEC.md` and `docs/internal/2026-06-13-INBOX-UI-SPEC.md`.
-Inspect or process queued requests.
-In `doc` or `hybrid` mode, prefer course-root `INBOX.md`.
 
 ## Interaction Modes in Practice
 

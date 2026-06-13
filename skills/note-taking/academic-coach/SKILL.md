@@ -145,6 +145,9 @@ Design the protocol so the surface name can be re-skinned later. The stable part
 18. If the course workspace includes doc-first artifacts (`DASHBOARD.md`, `INBOX.md`, `OUTBOX.md`, `SESSIONS/`, or `TOPICS/`), then chat/pseudo-command interactions are not a bypass: each executed teaching/review/exam/audit transaction must also be persisted into the same documentation layer, especially `SESSIONS/` and `OUTBOX.md`, and into `INBOX.md` when a normalized request record is needed.
 19. In a hybrid workflow, terminal chat is just another request-entry surface. Persistence rules must stay identical across chat, note, and cron-originated runs.
 20. For `continue`, do not score or update persistent learning state until the user has answered the assessment questions for that round, unless the user explicitly asks for a rough provisional score.
+21. Only one active instructional thread per course. If a session note is in `awaiting_user_answer`, new teaching actions must not silently replace it. Surface the conflict and let the user choose: resume or cancel-and-restart.
+22. Every interactive teaching/review/exam session must create a session note in `SESSIONS/`. Read-only actions (`status`, `help`) are exempt.
+23. `INBOX.md` is a UI projection driven by course interaction state. Its layout (command-entry, clarification, answer-entry, post-completion) is determined by the current state, not by a static template.
 
 ## When to Use
 
@@ -480,7 +483,8 @@ After clarification:
 
 ### Step 0: state header
 
-Every active teaching reply begins with the fixed status header:
+Every active teaching reply begins with the fixed status header.
+**Prefer using `companion.get_progress()` and `companion.detect_state()`** to populate these values rather than manually reading and counting from raw files:
 
 - 当前课程：...
 - 当前知识点：...
@@ -491,13 +495,13 @@ Every active teaching reply begins with the fixed status header:
 
 ### Step 1: choose the next knowledge point
 
-Select exactly one next knowledge point using:
+**Prefer `companion.find_eligible_next_kps()`** to get the dependency-safe, weight-sorted shortlist. Then use LLM judgment to pick from the top candidates considering:
 
-1. dependency priority
-2. difficulty progression
-3. exam weight
-4. review urgency
-5. recent mistake concentration
+1. exam weight (from companion priority score)
+2. review urgency (from `companion.find_due_reviews()`)
+3. continuity (prefer learning over unseen when scores are close)
+4. recent mistake concentration
+5. user hint if provided
 
 Explain the choice briefly if helpful.
 
@@ -551,16 +555,48 @@ If the user previously mastered the point but now fails badly in review, downgra
 
 ### Step 7: update records
 
-After evaluation, update:
+After evaluation, update all state files. **Prefer batching updates via `execute_code`** using `patch()` calls. The companion's write operations (Phase 2) will handle this deterministically; until then, update these files manually in one batch:
 
 - `PROGRESS.md`
-- `WEAK_POINTS.md`
-- `MISTAKES.md` if needed
-- `REVIEW_SCHEDULE.md`
-- `KNOWLEDGE_REGISTRY.json`
-- optional `TEACHING_LOG.md`
+- `WEAK_POINTS.md` (add/update/remove as score dictates)
+- `MISTAKES.md` (append any new errors with cause + linked KP)
+- `REVIEW_SCHEDULE.md` (schedule +1d/+3d/+7d/+14d/+30d from today)
+- `KNOWLEDGE_REGISTRY.json` (update status, score, last_session, next_review)
+- `TEACHING_LOG.md` (append session entry)
+- If doc-surface enabled: update `OUTBOX.md` with completion summary + next action
+- If doc-surface enabled: update `SESSIONS/` session note to `completed`
 
 Then stop and wait. Do not auto-start the next point.
+
+## Status Protocol: `academic-coach status`
+
+Report the current course state. Use `companion.get_progress()` for accurate counts.
+
+Output:
+- course name + course_id
+- interaction mode + workspace mode
+- current interaction state (from `companion.detect_state()`)
+- progress: mastered/total (percentage), plus learning/weak/unseen/forgotten counts
+- due reviews today and within 3 days (from `companion.find_due_reviews()`)
+- weak points summary
+- next recommended action
+- active session if any (from `companion.find_active_session()`)
+
+## Inbox Protocol: `academic-coach inbox`
+
+Dispatch the current INBOX.md as a doc-mode request.
+
+Execution flow:
+1. Parse INBOX.md via `companion.parse_inbox(ctx)` — extracts action, details, context
+2. Validate via `companion.validate_request(parsed)` — rejects multi-select, empty action
+3. Detect current state via `companion.detect_state(ctx)`
+4. **Conflict check**: if state is `awaiting_user_answer` and the user is starting a new instructional action, surface the conflict. Offer: resume current thread OR cancel and start new.
+5. If valid and no conflict, normalize into the corresponding internal mode (`continue`, `review`, `exam`, etc.) and execute
+6. Create/update session note in `SESSIONS/`
+7. After completion, update `OUTBOX.md` with result + next action
+8. Reset `INBOX.md` projection according to the state machine (post-completion → command-entry)
+
+The inbox is a projection surface, not the canonical state store. Session notes are the durable record.
 
 ## Review Protocol: `academic-coach review`
 
