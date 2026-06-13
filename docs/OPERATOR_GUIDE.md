@@ -65,6 +65,8 @@ Use it when:
 
 Before the first real `academic-coach init`, follow `docs/INIT_CHECKLIST.md` so workspace mode, target folder, material readiness, and summary confirmation are all checked before file creation.
 
+For the exact first-turn reply shape in fresh/no-state workspaces, also follow `docs/INIT_RESPONSE_SKELETON.md`.
+
 ## Starting From a Fresh Directory or No-State Workspace
 
 If the user starts with `/academic-coach ...` but there is no existing `study-system/` or course state yet, the protocol should not pretend that progress, due reviews, or auditable records already exist.
