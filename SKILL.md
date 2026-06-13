@@ -252,6 +252,41 @@ Command-specific behavior when no study-system exists:
 - `exam`: may proceed only as an ad-hoc mock session if the user explicitly wants that, but should still explain that persistent tracking requires bootstrap
 - natural-language requests such as `/academic-coach 帮我复习 xxx` or `use academic-coach to study ...`: treat them as intent triggers and route them through this gate when no state exists
 
+### Lightweight Bootstrap
+
+Use lightweight bootstrap only when all of the following are true:
+- there is no established `study-system/` yet
+- the user did not explicitly ask for a full archival init first
+- the user wants immediate teaching, review, or exam help before the full system is built
+- enough minimum context is available to avoid fabricating the subject or scope
+
+Minimum required clarification for lightweight bootstrap:
+1. course or subject name
+2. preferred teaching/output language
+3. workspace mode and intended target folder, or explicit permission to defer file creation temporarily
+4. immediate goal for this session (e.g. review one topic, debug one homework concept, run one mock question)
+5. currently available materials or evidence, even if partial
+
+Lightweight bootstrap behavior:
+1. create or reserve the target course context if the user wants persistence now
+2. create a minimal state footprint instead of the full archive when appropriate
+3. record unknowns explicitly rather than guessing missing chapters, assets, or exam weights
+4. allow exactly one immediate teaching/review/exam task after the minimal clarification is done
+5. clearly mark the session as partially initialized until full `academic-coach init` or `academic-coach sync` completes the archive
+
+Minimal artifacts for lightweight bootstrap when persistence is requested:
+- `COURSE_CONFIG.json`
+- `STATUS.md`
+- `PROGRESS.md`
+- `KNOWLEDGE_REGISTRY.json` with only confirmed knowledge points or placeholders clearly marked as provisional
+- `SYLLABUS_ASSETS.md` with partial-inventory notes
+
+Rules:
+- do not fabricate a full knowledge tree from thin evidence
+- do not generate comprehensive exam-focus rankings without supporting materials
+- do not silently upgrade lightweight bootstrap into full init without saying so
+- recommend full `academic-coach init` or `academic-coach sync` once enough materials are available
+
 ### Initialization steps
 
 After clarification:

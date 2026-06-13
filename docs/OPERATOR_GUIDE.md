@@ -81,6 +81,20 @@ This applies both to pseudo-commands and natural-language triggers such as:
 - `/academic-coach 帮我复习概率论`
 - `use academic-coach to study operating systems`
 
+## Lightweight Bootstrap vs Full Init
+
+Use lightweight bootstrap when the user wants immediate help in a fresh workspace and there is not enough evidence yet for a full archive-quality initialization.
+
+Lightweight bootstrap should:
+1. confirm the minimum needed context
+2. avoid fabricating a full knowledge tree or exam ranking
+3. optionally create only the minimal persistent files
+4. permit one immediate teaching / review / exam task
+5. leave the workspace clearly marked as partially initialized
+
+Use full `academic-coach init` when the user wants the complete long-term study-system built now.
+Use `academic-coach sync` later if the first session started lightweight and more materials arrive.
+
 ## Recommended First-Time Usage
 
 When you do not yet have every textbook, PPT, lab report, and past paper, the repo should still be used in a pragmatic order:

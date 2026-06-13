@@ -92,20 +92,31 @@ Use when the user suspects drift, missing files, stale status summaries, or mism
 - Recommended repairs:
 - Suggested next command:
 
-## What Happens If You Start Without `init`
+## Lightweight Bootstrap
 
-If the user invokes `academic-coach` from a fresh directory or a workspace with no known `study-system/`, the skill should not fabricate progress, due reviews, weak points, or audit results.
+Lightweight bootstrap is the fallback for a fresh workspace when the user wants immediate help before a full `academic-coach init`.
 
-Instead it should:
-1. acknowledge the requested intent
-2. explain that no initialized course state has been detected yet
-3. enter a minimal bootstrap clarification phase
-4. after clarification, either run full `academic-coach init` or perform a lightweight bootstrap if the user explicitly wants immediate teaching before complete archive setup
+Use it when:
+- there is no established `study-system/`
+- the user wants immediate teaching / review / mock-exam help
+- only partial materials are available
+- fabricating a full archive would be dishonest
 
-Examples:
-- `/academic-coach review` in a fresh workspace → do not invent due items; bootstrap first
-- `/academic-coach audit` in a fresh workspace → explain there is nothing to audit yet; bootstrap first
-- `/academic-coach 帮我复习线性代数` → treat as a valid intent trigger; extract the course/topic and route into bootstrap
+Minimum clarification still required:
+1. course or subject name
+2. preferred teaching/output language
+3. workspace mode and target folder, or explicit permission to defer file creation
+4. immediate session goal
+5. currently available materials or evidence
+
+If persistence is requested, the minimal artifact set should usually be:
+- `COURSE_CONFIG.json`
+- `STATUS.md`
+- `PROGRESS.md`
+- `KNOWLEDGE_REGISTRY.json` with provisional entries only when clearly marked
+- `SYLLABUS_ASSETS.md` with partial-inventory notes
+
+After the immediate session, the agent should recommend full `academic-coach init` or `academic-coach sync` to complete the archive.
 
 ## Recommended First-Time Flow
 
