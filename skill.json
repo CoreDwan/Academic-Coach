@@ -1,0 +1,26 @@
+{
+  "name": "academic-coach",
+  "displayName": "Academic Coach",
+  "description": "Reusable multilingual academic tutoring protocol with persistent study-state management and one-knowledge-point-at-a-time teaching workflows.",
+  "version": "1.0.0",
+  "author": "Cheri Wen",
+  "license": "MIT",
+  "repository": "https://github.com/CoreDwan/Academic-Coach",
+  "homepage": "https://github.com/CoreDwan/Academic-Coach",
+  "keywords": [
+    "academic",
+    "tutoring",
+    "study-system",
+    "spaced-repetition",
+    "obsidian",
+    "skill"
+  ],
+  "platforms": [
+    "hermes",
+    "manual"
+  ],
+  "install": {
+    "hermesTap": "hermes skills tap add CoreDwan/Academic-Coach && hermes skills install CoreDwan/Academic-Coach/academic-coach",
+    "manual": "git clone https://github.com/CoreDwan/Academic-Coach.git"
+  }
+}

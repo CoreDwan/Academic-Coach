@@ -3,6 +3,8 @@
 Preview docs:
 - English: [README.en.md](README.en.md)
 - 中文: [README.zh-CN.md](README.zh-CN.md)
+- Installation: [docs/INSTALLATION.md](docs/INSTALLATION.md)
+- License: [LICENSE](LICENSE)
 
 Quick summary:
 - reusable academic tutoring protocol

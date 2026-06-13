@@ -1,0 +1,31 @@
+{
+  "course_name": "{{COURSE_NAME}}",
+  "academic_term": "{{ACADEMIC_TERM}}",
+  "workspace_mode": "{{WORKSPACE_MODE}}",
+  "workspace_root": "{{WORKSPACE_ROOT_OR_NULL}}",
+  "preferred_language": "{{PREFERRED_LANGUAGE}}",
+  "course_folder": "{{COURSE_FOLDER}}",
+  "study_system_folder": "{{STUDY_SYSTEM_FOLDER}}",
+  "exam_date": "{{EXAM_DATE_OR_NULL}}",
+  "target_goal": "{{TARGET_GOAL}}",
+  "teaching_language": "zh-CN",
+  "preserve_english_terms": true,
+  "one_knowledge_point_per_round": true,
+  "default_review_intervals_days": [1, 3, 7, 14, 30],
+  "scoring_policy": {
+    "conceptual_understanding": 0.3,
+    "expression_accuracy": 0.2,
+    "application_ability": 0.3,
+    "knowledge_linkage": 0.2
+  },
+  "status_thresholds": {
+    "mastered_min": 90,
+    "learning_min": 70,
+    "weak_below": 70
+  },
+  "cron_policy": {
+    "require_confirmation": true,
+    "daily_review_cron": null,
+    "weekly_exam_cron": null
+  }
+}

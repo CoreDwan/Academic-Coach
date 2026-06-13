@@ -10,12 +10,21 @@ This repository is multilingual by design:
 Current status:
 - protocol-first
 - pure skill workflow, not a native Hermes slash command
+- Hermes repository-tap install supported via `skills/note-taking/academic-coach/`
 - Obsidian-default workspace design, with support for a user-chosen external markdown workspace
 - explicit `workspace_mode` selection during init (`obsidian` or `external-markdown`)
 - mixed-material support for textbooks, PPT/PPTX, PDFs, notes, images, lab reports, homework, and past exams
 
 Core idea:
 Academic Coach treats a course like a persistent study system rather than a one-off Q&A session.
+
+Quick install (Hermes):
+```bash
+hermes skills tap add CoreDwan/Academic-Coach
+hermes skills install CoreDwan/Academic-Coach/academic-coach
+```
+
+See `docs/INSTALLATION.md` for manual clone/copy and cross-agent adaptation paths.
 
 Repository layout:
 - `SKILL.md` — main protocol definition
@@ -76,6 +85,7 @@ Design constraints:
 - no fake mastery, no fake coverage, no invented evidence
 
 See also:
+- `docs/INSTALLATION.md`
 - `docs/OPERATOR_GUIDE.md`
 - `docs/INIT_CHECKLIST.md`
 - `docs/INIT_RESPONSE_SKELETON.md`
