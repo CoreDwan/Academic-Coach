@@ -100,12 +100,14 @@ def _parse_inbox_content(content: str) -> ParsedRequest:
 def _extract_section(content: str, heading: str) -> str:
     """Extract the content under a markdown heading until the next heading or footer.
 
-    Handles both '## Heading' and '## ▶ Heading' style headers.
+    The heading can be decorated with emoji prefixes (e.g. '## ▶ Action').
+    We match the heading text loosely after the ## prefix.
     """
-    # Build a regex that matches the heading (with optional emoji prefix)
-    escaped = re.escape(heading)
-    # Allow optional emoji/decoration before the heading text
-    pattern = rf"^#{1,3}\s+(?:[▶❓✏📎]\s*)?{escaped}\s*\n(.*?)(?=^#{1,3}\s|\n---\n|\Z)"
+    # re.escape converts spaces to '\ ' which breaks in raw strings.
+    # Instead, escape only regex-special chars, then replace literal spaces with \s+
+    escaped = re.escape(heading).replace(r'\ ', r'\s+')
+    # Double braces for f-string: {{1,3}} → literal {1,3} in regex
+    pattern = rf"^#{{1,3}}\s+{escaped}\s*\n(.*?)(?=^#{{1,3}}\s|\n---\n|\Z)"
     match = re.search(pattern, content, re.MULTILINE | re.DOTALL)
     if match:
         return match.group(1).strip()
@@ -113,9 +115,13 @@ def _extract_section(content: str, heading: str) -> str:
 
 
 def _find_checked_actions(action_text: str) -> list[str]:
-    """Find all checked checkbox labels in the action section."""
+    """Find all checked checkbox labels in the action section.
+
+    Handles: '- [x] continue', '- [x] **continue**', '- [x] **continue** — desc'
+    """
     checked: list[str] = []
-    for m in re.finditer(r"- \[x\]\s+\*?\*?(\w+)\*?\*?", action_text, re.IGNORECASE):
+    # Match: - [x] then whitespace, then optional bold markers, then the label word
+    for m in re.finditer(r"- \[x\]\s+\*{0,2}(\w+)\*{0,2}", action_text, re.IGNORECASE):
         label = m.group(1).lower().strip()
         if label in _ACTION_LABEL_MAP:
             checked.append(label)

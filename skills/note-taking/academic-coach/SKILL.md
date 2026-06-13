@@ -600,22 +600,17 @@ The inbox is a projection surface, not the canonical state store. Session notes 
 
 ## Review Protocol: `academic-coach review`
 
-Use spaced repetition. Default intervals:
+Use spaced repetition. Default intervals: 1d / 3d / 7d / 14d / 30d.
 
-- 1 day
-- 3 days
-- 7 days
-- 14 days
-- 30 days
+**Use `companion.find_due_reviews()`** to get the due review queue. Do not manually scan KNOWLEDGE_REGISTRY.json.
 
 Review flow:
-
-1. choose due items from `KNOWLEDGE_REGISTRY.json`
-2. ask recall / transfer questions before re-explaining
-3. rescore the knowledge point
-4. if failure is substantial, downgrade status
-5. recompute the next review date
-6. update review history and markdown summaries
+1. Get due items from `companion.find_due_reviews(ctx, days=0)`
+2. Ask recall / transfer questions before re-explaining
+3. Rescore the knowledge point
+4. If failure is substantial, downgrade status (use `companion.apply_mastery_changes()`)
+5. Recompute the next review date (use `companion.schedule_reviews()`)
+6. Update review history and markdown summaries
 
 When multiple items are due, still handle one knowledge point at a time unless the user explicitly asks for a batch review summary.
 
@@ -705,28 +700,16 @@ Tasks:
 
 ## Audit Protocol: `academic-coach audit`
 
-Use this command to audit and correct the current `study-system/` state.
+**Use `companion.audit(ctx)`** for a comprehensive automated audit. The companion runs 7 checks:
+1. Registry cross-reference with filesystem
+2. Required file existence
+3. Doc surface file existence
+4. SESSIONS/ directory health
+5. Single-thread enforcement
+6. Progress consistency (registry vs PROGRESS.md)
+7. Naming convention compliance
 
-Audit checks should include:
-1. required-file existence
-2. uppercase naming compliance
-3. JSON parse validity for `KNOWLEDGE_REGISTRY.json`
-4. mismatch between registry counts and `PROGRESS.md`
-5. mismatch between registry state and `STATUS.md` if present
-6. obvious review drift between `next_review` fields and `REVIEW_SCHEDULE.md`
-7. mismatch between weak statuses, `WEAK_POINTS.md`, and `MISTAKES.md`
-8. stale `SYLLABUS_ASSETS.md` inventory relative to known materials
-9. stale or under-evidenced `EXAM_FOCUS.md`
-
-Audit output should report:
-- missing files
-- stale files
-- inconsistent files
-- repairs applied
-- repairs still requiring human input
-- suggested next command
-
-Prefer explicit repair notes over silent rewriting.
+The companion returns a structured report with status (`healthy`/`warnings`/`broken`), a list of issues, and repair recommendations. Supplement with manual inspection for subject-matter concerns (exam focus freshness, material coverage).
 
 ## Mistake Logging Rules
 
